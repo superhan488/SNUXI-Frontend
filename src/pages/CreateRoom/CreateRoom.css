@@ -1,47 +1,53 @@
-/* 전체 레이아웃 */
+/* CreateRoom */
 .create-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 16px;
-  font-family: Arial, sans-serif;
-  background-color: #ffffff;
-  min-height: calc(100vh - 60px);
-
+  padding: 20px 16px 40px;
+  background-color: var(--bg-base);
+  min-height: calc(100vh - 64px);
   max-width: 480px;
   margin: 0 auto;
 }
 
-/* 로딩 */
 .loading-container {
   justify-content: center;
   align-items: center;
   height: 80vh;
 }
 .loading-text {
-  color: #868e96;
+  color: var(--text-muted);
   font-size: 1rem;
 }
 
 h1 {
-  color: #333;
-  margin: 25px 0 25px 0;
-  font-size: 1.725rem;
+  color: var(--text-primary);
+  margin: 22px 0 22px 0;
+  font-size: 1.65rem;
+  font-weight: 800;
   text-align: center;
+  letter-spacing: -0.03em;
 }
 
+/* Section cards */
 .card {
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid #f1f3f5;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1.5px solid var(--border);
   padding: 20px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   width: 100%;
   box-sizing: border-box;
+  transition: box-shadow 0.2s;
 }
 
-/* 출발지/도착지 */
+.card:focus-within {
+  box-shadow: var(--shadow-md);
+  border-color: #c7d2fe;
+}
+
+/* Route selector */
 .location-box {
   display: flex;
   justify-content: space-between;
@@ -62,35 +68,37 @@ h1 {
   width: 100%;
   text-align: center;
   outline: none;
-  font-weight: bold;
-  color: #333;
+  font-weight: 800;
+  color: var(--text-primary);
   cursor: pointer;
   text-overflow: ellipsis;
+  letter-spacing: -0.02em;
 }
 
 .arrow {
-  font-size: 18px;
-  color: #adb5bd;
+  font-size: 20px;
+  color: var(--brand-primary);
   flex-shrink: 0;
 }
 
 .input-group label {
   display: block;
-  margin-bottom: 12px;
-  color: #495057;
-  font-size: 14px;
-  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-/* --- 커스텀 날짜 선택기 스타일 (수정됨) --- */
+/* Date picker */
 .custom-date-input-wrapper {
   position: relative;
   width: 100%;
   height: 50px;
-  cursor: pointer; /* 커서가 손가락 모양으로 바뀌도록 추가 */
+  cursor: pointer;
 }
 
-/* [수정] 실제 input은 클릭을 방해하지 않도록 뒤로 숨김 */
 .hidden-date-input {
   position: absolute;
   top: 0;
@@ -98,37 +106,36 @@ h1 {
   width: 100%;
   height: 100%;
   opacity: 0;
-  z-index: -1; /* 뒤로 보냄 */
-  pointer-events: none; /* 클릭 이벤트를 받지 않음 (div가 받아서 js로 처리) */
+  z-index: -1;
+  pointer-events: none;
 }
 
-/* 눈에 보이는 디자인 박스 */
 .date-display-box {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  background-color: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-base);
   display: flex;
   align-items: center;
   padding: 0 16px;
   box-sizing: border-box;
-  color: #adb5bd;
+  color: var(--text-muted);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-/* hover 효과 추가 */
 .custom-date-input-wrapper:hover .date-display-box {
-  border-color: #adb5bd;
+  border-color: #a5b4fc;
 }
 
 .date-display-box.active {
-  color: #333;
-  font-weight: 500;
-  border-color: #007bff; /* 선택되면 파란 테두리 */
+  color: var(--text-primary);
+  font-weight: 600;
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
 .calendar-icon {
@@ -137,68 +144,80 @@ h1 {
 }
 
 .date-text {
-  font-size: 16px;
+  font-size: 15px;
 }
-/* -------------------------------- */
 
-/* 인원 조절 */
+/* Participant counter */
 .participant-control {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #f8f9fa;
-  padding: 8px 12px;
-  border-radius: 8px;
+  background: var(--bg-base);
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
 }
 
 .participant-control button {
-  background-color: #ffffff;
-  border: 1px solid #dee2e6;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
   border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  font-size: 18px;
+  width: 36px;
+  height: 36px;
+  font-size: 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #333;
+  color: var(--brand-primary);
   transition: all 0.2s;
+  font-weight: 700;
 }
 
-.participant-control button:active {
-  background-color: #e9ecef;
+.participant-control button:hover:not(:disabled) {
+  background: #ede9fe;
+  border-color: var(--brand-primary);
+}
+
+.participant-control button:active:not(:disabled) {
+  transform: scale(0.92);
 }
 
 .participant-control button:disabled {
   opacity: 0.3;
   cursor: not-allowed;
-  background-color: #f1f3f5;
-  border-color: #e9ecef;
 }
 
 .participant-control span {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
 }
 
-/* 방 개설 버튼 */
+/* Create button */
 .create-button {
   width: 100%;
-  padding: 16px;
+  padding: 17px;
   border: none;
-  border-radius: 10px;
-  background-color: #007bff;
+  border-radius: var(--radius-md);
+  background: var(--brand-gradient);
   color: white;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 800;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 16px;
   margin-bottom: 20px;
-  transition: background-color 0.2s;
+  transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.35);
+  letter-spacing: -0.01em;
 }
 
 .create-button:hover {
-  background-color: #0069d9;
+  opacity: 0.92;
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.45);
+}
+
+.create-button:active {
+  transform: scale(0.98);
 }

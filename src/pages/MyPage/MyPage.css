@@ -1,150 +1,206 @@
+/* MyPage */
 .mypage-container {
-  max-width: 500px;
-  margin: 40px auto;
-  padding: 20px;
+  max-width: 480px;
+  margin: 30px auto;
+  padding: 0 16px 40px;
   text-align: center;
 }
 
 .mypage-profile-card {
-  background: white;
-  border-radius: 12px;
-  padding: 30px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  box-shadow: var(--shadow-md);
+  border: 1.5px solid var(--border);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 22px;
+  position: relative;
+  overflow: hidden;
 }
 
-/* 프로필 이미지 스타일 */
+.mypage-profile-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: var(--brand-gradient);
+  opacity: 0.08;
+}
+
+/* Profile image */
 .mypage-profile-image-wrapper {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
   overflow: hidden;
-  border: 3px solid #eee;
+  border: 3px solid transparent;
+  background: var(--brand-gradient);
+  padding: 3px;
+  box-shadow: var(--shadow-md);
+  z-index: 1;
 }
 
 .mypage-profile-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 50%;
 }
 
 .mypage-profile-image.editable {
   cursor: pointer;
 }
 
-/* 수정 모드일 때 이미지 위에 '변경' 텍스트 띄우기 */
 .mypage-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(30, 27, 75, 0.55);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
-  pointer-events: none; /* 클릭은 부모(wrapper)가 받음 */
+  font-size: 0.85rem;
+  font-weight: 600;
+  pointer-events: none;
+  border-radius: 50%;
 }
 
-/* 정보 텍스트 영역 */
+/* Info section */
 .mypage-profile-info {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 15px;
+  gap: 14px;
+  z-index: 1;
 }
 
 .mypage-info-row {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 5px;
+  gap: 4px;
+  width: 100%;
 }
 
 .mypage-info-row label {
-  font-size: 0.85rem;
-  color: #888;
-  font-weight: bold;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .mypage-email-text,
 .mypage-nickname-text {
-  font-size: 1.1rem;
-  color: #333;
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 .mypage-nickname-input {
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
   font-size: 1rem;
+  outline: none;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-/* 버튼 스타일 */
+.mypage-nickname-input:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* Button group */
 .mypage-button-group {
   display: flex;
-  gap: 10px;
-  margin-top: 10px;
+  gap: 8px;
+  margin-top: 6px;
   width: 100%;
   justify-content: center;
+  z-index: 1;
 }
 
 .mypage-edit-btn,
 .mypage-save-btn {
-  background-color: #007bff;
+  background: var(--brand-gradient);
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
+  padding: 11px 24px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  font-weight: bold;
-}
-
-.mypage-cancel-btn {
-  background-color: #f1f3f5;
-  color: #333;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: 0 3px 10px rgba(79, 70, 229, 0.3);
+  transition: opacity 0.2s, transform 0.1s;
 }
 
 .mypage-edit-btn:hover,
 .mypage-save-btn:hover {
-  background-color: #0056b3;
+  opacity: 0.9;
+}
+
+.mypage-edit-btn:active,
+.mypage-save-btn:active {
+  transform: scale(0.97);
+}
+
+.mypage-cancel-btn {
+  background: var(--bg-base);
+  color: var(--text-secondary);
+  border: 1.5px solid var(--border);
+  padding: 11px 24px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.mypage-cancel-btn:hover {
+  background: #ede9fe;
+  border-color: #a5b4fc;
+  color: var(--brand-primary);
 }
 
 .mypage-withdraw-btn {
-  background-color: #f1f3f5;
-  color: #495057;
+  background: none;
+  color: var(--text-muted);
   border: none;
   padding: 10px 20px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 500;
+  font-size: 0.85rem;
+  text-decoration: underline;
+  transition: color 0.2s;
 }
 
 .mypage-withdraw-btn:hover {
-  background-color: #e9ecef;
-  color: #343a40;
+  color: #ef4444;
 }
 
-/* Modal Styles - 이름을 변경하여 충돌 방지 */
+/* Modals */
 .mypage-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(30, 27, 75, 0.45);
+  backdrop-filter: blur(3px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -152,36 +208,37 @@
 }
 
 .mypage-modal-content {
-  background-color: #ffffff;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  background-color: var(--bg-card);
+  padding: 28px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
   max-width: 90%;
-  width: 500px;
+  width: 400px;
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 14px;
   max-height: 80vh;
 }
 
 .mypage-modal-content h3 {
-  margin: 0 0 10px 0;
-  font-size: 1.2rem;
-  color: #333;
+  margin: 0;
+  font-size: 1.15rem;
+  color: var(--text-primary);
+  font-weight: 800;
 }
 
 .mypage-terms-content {
   text-align: left;
-  font-size: 0.95rem;
-  color: #555;
-  line-height: 1.6;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
   overflow-y: auto;
-  padding-right: 10px;
+  padding-right: 8px;
 }
 
 .mypage-terms-content strong {
-  color: #333;
+  color: var(--text-primary);
 }
 
 .mypage-terms-content ul {
@@ -195,34 +252,36 @@
 }
 
 .mypage-close-button {
-  background-color: #007bff;
-  color: #ffffff;
+  background: var(--brand-gradient);
+  color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: 11px 24px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.2s;
-  margin-top: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  transition: opacity 0.2s;
+  margin-top: 8px;
+  box-shadow: 0 3px 10px rgba(79, 70, 229, 0.3);
 }
 
 .mypage-close-button:hover {
-  background-color: #0056b3;
+  opacity: 0.9;
 }
 
-/* [추가] 로그인 안 했을 때 메시지 스타일 (MyChat과 유사하게) */
+/* No login state */
 .mypage-no-login-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 100px; /* MyChat의 margin-top: 100px과 동일 */
+  margin-top: 100px;
   gap: 20px;
 }
 
 .mypage-no-login-text {
   text-align: center;
-  color: #000000;
-  font-size: 1.1rem; /* MyChat의 font-size: 1.1rem과 동일 */
-  font-weight: 500; /* MyChat의 font-weight: 500과 동일 */
+  color: var(--text-primary);
+  font-size: 1.05rem;
+  font-weight: 500;
 }

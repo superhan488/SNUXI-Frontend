@@ -1,58 +1,80 @@
-/* 전체 컨테이너 */
+/* MyChat */
 .my-chat-container {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 64px);
   overflow: hidden;
-  background-color: #ffffff;
+  background-color: var(--bg-base);
   max-width: 480px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 20px 16px;
 }
 
-/* 로딩 화면 스타일 */
 .loading-container {
   align-items: center;
   justify-content: center;
 }
 .loading-text {
-  color: #868e96;
+  color: var(--text-muted);
   font-size: 1rem;
 }
 
-/* 페이지 제목 */
+/* Page title */
 .page-title {
-  font-size: 1.725rem;
+  font-size: 1.65rem;
+  font-weight: 800;
   margin-bottom: 20px;
-  color: #333;
+  color: var(--text-primary);
   text-align: center;
+  letter-spacing: -0.03em;
 }
 
-/* 팟 없음 메시지 스타일 */
+/* No pot message */
 .no-pot-message {
   text-align: center;
-  color: #000000;
-  margin-top: 100px;
-  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-top: 80px;
+  font-size: 1rem;
   font-weight: 500;
+  line-height: 1.6;
 }
 
-/* 팟 카드 스타일 */
+.no-pot-message::before {
+  content: '🚕';
+  display: block;
+  font-size: 2.8rem;
+  margin-bottom: 14px;
+}
+
+/* Pot card */
 .current-pot-card {
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f1f3f5;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  box-shadow: var(--shadow-md);
+  border: 1.5px solid var(--border);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.current-pot-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--brand-gradient);
 }
 
 .current-pot-card:hover {
-  background-color: #f8f9fa;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
 .pot-link {
@@ -68,18 +90,17 @@
   gap: 8px;
 }
 
-/* 경로 정보 스타일 */
 .pot-info {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #212529;
-  gap: 4px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  gap: 3px;
+  letter-spacing: -0.02em;
 }
 
-/* 화살표와 도착지를 묶는 컨테이너 */
 .route-destination-row {
   display: flex;
   align-items: center;
@@ -95,95 +116,107 @@
 }
 
 .arrow {
-  color: #adb5bd;
+  color: var(--brand-primary);
   font-weight: normal;
   flex-shrink: 0;
 }
 
 .unread-badge {
-  background-color: #ff4d4d;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
   color: white;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 2px 8px;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   margin-left: 8px;
-  font-weight: bold;
+  font-weight: 700;
   flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.35);
 }
 
 .pot-meta {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.9rem;
-  color: #666;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
   flex-wrap: wrap;
 }
 
 .time {
-  background-color: #f1f3f5;
-  padding: 2px 6px;
-  border-radius: 4px;
+  background: var(--bg-base);
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
 }
 
-/* 나가기 버튼 스타일 */
+/* Leave button */
 .leave-button {
-  background-color: #ff6b6b;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
   color: white;
   border: none;
-  padding: 8px 14px;
-  border-radius: 8px;
+  padding: 9px 14px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  font-weight: bold;
-  font-size: 0.9rem;
-  transition: background-color 0.2s;
+  font-weight: 700;
+  font-size: 0.85rem;
+  transition: opacity 0.2s, transform 0.1s;
   white-space: nowrap;
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
 }
 
 .leave-button:hover {
-  background-color: #fa5252;
+  opacity: 0.88;
 }
 
-/* [추가] 배지들이 나열될 때 간격 조정 */
+.leave-button:active {
+  transform: scale(0.96);
+}
+
+/* Status badges */
 .status-badge-group {
   display: flex;
   gap: 4px;
 }
 
-/* 상태 배지 스타일 */
 .status-badge {
-  font-size: 0.8rem;
-  padding: 4px 8px;
-  border-radius: 6px;
+  font-size: 0.73rem;
+  padding: 4px 10px;
+  border-radius: 20px;
   font-weight: 700;
-  white-space: nowrap; /* 배지 텍스트 줄바꿈 방지 */
+  white-space: nowrap;
+  letter-spacing: 0.02em;
 }
 
 .status-badge.recruiting {
-  background-color: #e6fcf5;
-  color: #0ca678;
+  background-color: var(--status-recruiting-bg);
+  color: var(--status-recruiting-text);
 }
 
 .status-badge.success {
-  background-color: #e7f5ff;
-  color: #1c7ed6;
+  background-color: var(--status-success-bg);
+  color: var(--status-success-text);
 }
 
 .status-badge.closed {
-  background-color: #f1f3f5;
-  color: #adb5bd;
+  background-color: var(--status-closed-bg);
+  color: var(--status-closed-text);
 }
 
-/* [추가] 모집중지(Locked) 스타일 (노란색 계열) */
 .status-badge.locked {
-  background-color: #fff9db;
-  color: #f59f00;
+  background-color: var(--status-locked-bg);
+  color: var(--status-locked-text);
 }
 
-/* 인원수 스타일 */
 .headcount-fixed {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #000000;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  background: var(--bg-base);
+  padding: 3px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
 }

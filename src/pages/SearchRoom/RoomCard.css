@@ -1,33 +1,57 @@
-/* 카드 기본 스타일 */
+/* RoomCard */
 .room-card {
-  background: white;
-  border-radius: 12px;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
   padding: 16px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f1f3f5;
+  box-shadow: var(--shadow-sm);
+  border: 1.5px solid var(--border);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.room-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--brand-gradient);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.room-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: #c7d2fe;
+}
+
+.room-card:hover::before {
+  opacity: 1;
 }
 
 .room-card:active {
   transform: scale(0.98);
 }
 
-/* 1. 경로 행 스타일 (수정됨) */
+/* Route row */
 .room-route-row {
   display: flex;
-  flex-direction: column; /* 세로 배치로 변경 */
-  align-items: flex-start; /* 왼쪽 정렬 */
-  gap: 4px; /* 출발지와 도착지 줄 사이 간격 */
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
   font-size: 1.05rem;
-  font-weight: 700;
-  color: #212529;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
 }
 
-/* 화살표와 도착지를 묶는 컨테이너 (새로 추가) */
 .route-destination-row {
   display: flex;
   align-items: center;
@@ -39,22 +63,22 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  /* 한 줄 전체를 쓸 수 있으므로 너비 제한을 100%로 변경 */
   max-width: 100%;
 }
 
 .arrow {
-  color: #adb5bd;
+  color: var(--brand-primary);
   font-weight: normal;
   flex-shrink: 0;
+  font-size: 1.1rem;
 }
 
-/* 2. 상세 정보 (시간, 요금) 스타일 */
+/* Details row */
 .room-details-row {
   display: flex;
   align-items: center;
-  font-size: 0.9rem;
-  color: #495057;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
   gap: 6px;
 }
 
@@ -65,21 +89,21 @@
 }
 
 .info-divider {
-  color: #dee2e6;
+  color: var(--border);
   margin: 0 2px;
 }
 
 .fee {
-  font-weight: 600;
-  color: #495057;
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
-/* 3. 하단 (방장, 상태) 스타일 */
+/* Footer row */
 .room-footer-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  border-top: 1px solid #f8f9fa;
+  border-top: 1px solid #f1f0ff;
   padding-top: 10px;
   margin-top: 2px;
 }
@@ -93,13 +117,16 @@
 }
 
 .host-label {
-  color: #adb5bd;
-  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
 }
 
 .host-name {
-  color: #495057;
-  font-weight: 500;
+  color: var(--text-secondary);
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -108,35 +135,37 @@
 .status-container {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .status-badge {
-  font-size: 0.8rem;
-  padding: 4px 8px;
-  border-radius: 6px;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 20px;
   font-weight: 700;
-  margin-left: 8px;
+  letter-spacing: 0.02em;
 }
 
 .status-badge.recruiting {
-  background-color: #e6fcf5;
-  color: #0ca678;
+  background-color: var(--status-recruiting-bg);
+  color: var(--status-recruiting-text);
 }
 
 .status-badge.success {
-  background-color: #e7f5ff;
-  color: #1c7ed6;
+  background-color: var(--status-success-bg);
+  color: var(--status-success-text);
 }
 
 .status-badge.closed {
-  background-color: #f1f3f5;
-  color: #adb5bd;
+  background-color: var(--status-closed-bg);
+  color: var(--status-closed-text);
 }
 
 .headcount-fixed {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #000000;
-  margin-left: 8px; /* 배지와의 간격 */
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  background: var(--bg-base);
+  padding: 3px 8px;
+  border-radius: 20px;
 }

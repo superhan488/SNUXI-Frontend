@@ -237,6 +237,7 @@ const RoomSearch = () => {
     <div className="search-container">
       <div className="sticky-header">
         <h1>택시팟 찾기</h1>
+        <p className="header-subtitle">SNU 학생들과 함께 택시를 나눠요 🚕</p>
         <div className="search-filter-card">
           <div className="filter-row">
             <select
@@ -347,7 +348,8 @@ const modalOverlayStyle: React.CSSProperties = {
   left: 0,
   width: '100%',
   height: '100%',
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  backgroundColor: 'rgba(30, 27, 75, 0.45)',
+  backdropFilter: 'blur(3px)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -356,40 +358,43 @@ const modalOverlayStyle: React.CSSProperties = {
 
 const modalContentStyle: React.CSSProperties = {
   backgroundColor: 'white',
-  padding: '24px',
-  borderRadius: '12px',
+  padding: '28px',
+  borderRadius: '20px',
   width: '80%',
   maxWidth: '300px',
   textAlign: 'center',
-  boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+  boxShadow: '0 8px 32px rgba(79, 70, 229, 0.16)',
+  border: '1.5px solid #e8e5ff',
 };
 
 const buttonGroupStyle: React.CSSProperties = {
   display: 'flex',
   justifyContent: 'space-between',
   marginTop: '20px',
-  gap: '10px',
+  gap: '8px',
 };
 
 const cancelButtonStyle: React.CSSProperties = {
   flex: 1,
-  padding: '10px',
+  padding: '11px',
   borderRadius: '8px',
-  border: '1px solid #ccc',
-  backgroundColor: '#f5f5f5',
+  border: '1.5px solid #e8e5ff',
+  backgroundColor: '#f5f3ff',
   cursor: 'pointer',
+  fontWeight: '600',
+  color: '#64748b',
 };
 
 const confirmButtonStyle: React.CSSProperties = {
   flex: 1,
-  padding: '10px',
+  padding: '11px',
   borderRadius: '8px',
   border: 'none',
-  backgroundColor: '#007bff', // [수정] 마이페이지 파란색 적용
+  background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
   color: 'white',
   cursor: 'pointer',
-  fontWeight: 'bold',
-  transition: 'background-color 0.2s', // 부드러운 색상 전환 추가
+  fontWeight: '700',
+  boxShadow: '0 3px 10px rgba(79, 70, 229, 0.3)',
 };
 
 export default RoomSearch;
