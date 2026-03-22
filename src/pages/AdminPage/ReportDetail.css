@@ -1,0 +1,88 @@
+.report-detail-container {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 2rem;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.report-actions {
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.action-button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.action-button {
+  background-color: #5cb85c;
+}
+.action-button:hover {
+  background-color: #4cae4c;
+}
+.action-button.suspend {
+  background-color: #d9534f;
+}
+.action-button.suspend:hover {
+  background-color: #c9302c;
+}
+
+.report-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.info-item {
+  line-height: 1.6;
+}
+
+.chat-logs {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.chat-log-item {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+}
+.chat-log-item:last-child {
+  border-bottom: none;
+}
+
+.log-username {
+  font-weight: bold;
+  color: #333;
+}
+
+.log-text {
+  margin: 0.5rem 0;
+}
+
+.log-time {
+  font-size: 0.8em;
+  color: #777;
+}

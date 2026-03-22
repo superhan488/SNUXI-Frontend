@@ -1,0 +1,95 @@
+/* 전체 컨테이너 */
+.search-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 60px); /* NavBar 높이 제외 */
+  overflow: hidden; /* 전체 페이지 스크롤 방지 -> 헤더 고정 효과 */
+  background-color: #ffffff; /* 흰색 배경 */
+
+  /* 모바일 뷰 시뮬레이션 (가운데 정렬) */
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* 로딩 화면용 스타일 */
+.loading-container {
+  align-items: center;
+  justify-content: center;
+}
+.loading-text {
+  color: #868e96;
+  font-size: 1rem;
+}
+
+/* 상단 고정 헤더 영역 (스크롤 되지 않음) */
+.sticky-header {
+  flex: 0 0 auto; /* 크기 고정 */
+  padding: 16px;
+  background-color: #fff;
+  z-index: 10;
+  /* 아래 그림자를 약하게 주어 구분감만 살짝 줌 */
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.sticky-header h1 {
+  margin: 30px 0 30px 0;
+  font-size: 1.75rem;
+  color: #333;
+  text-align: center;
+}
+
+/* 필터 카드 스타일 */
+.search-filter-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.filter-row select {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background-color: white;
+  min-width: 0;
+  text-overflow: ellipsis;
+}
+
+.filter-row .arrow {
+  font-weight: bold;
+  color: #adb5bd;
+  font-size: 0.9rem;
+}
+
+/* 스크롤 가능한 리스트 영역 (여기만 스크롤 됨) */
+.room-list-scroll {
+  flex: 1 1 auto;
+  overflow-y: auto; /* 세로 스크롤 허용 */
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.no-result {
+  text-align: center;
+  color: #888;
+  margin-top: 50px;
+  font-size: 0.95rem;
+}
+
+/* 로딩 감지용 요소 */
+.loading-sentinel {
+  height: 20px;
+  text-align: center;
+  color: #aaa;
+  margin-top: 10px;
+  font-size: 0.8rem;
+}
