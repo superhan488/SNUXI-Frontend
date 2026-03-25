@@ -8,6 +8,18 @@ interface RoomCardProps {
   isMyPot?: boolean;
 }
 
+const maskHostName = (name: string) => {
+  const parts = name.split(' / ');
+  const chars = Array.from(parts[0].replace(/^[^가-힣a-zA-Z0-9]+/, ''));
+  if (chars.length >= 2) {
+    chars[1] = '*';
+    parts[0] = chars.join('');
+  } else {
+    parts[0] = chars.join('');
+  }
+  return parts.join(' / ');
+};
+
 const RoomCard: React.FC<RoomCardProps> = ({ room, onClick, isMyPot }) => {
   const now = new Date();
   const departure = new Date(room.departureTime);
@@ -74,7 +86,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onClick, isMyPot }) => {
 
       {/* 하단 */}
       <div className="rc-footer">
-        <span className="rc-host">{room.hostName}</span>
+        <span className="rc-host">{maskHostName(room.hostName)}</span>
         <div className="rc-right">
           {isMyPot && <span className="my-pot-badge">참여중</span>}
           <span className={`rc-badge ${statusClass}`}>{statusText}</span>

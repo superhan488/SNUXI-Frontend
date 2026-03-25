@@ -1,22 +1,14 @@
-import { useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { submitTermsAgreement } from '../../api/auth';
 import { BACKEND_URL } from '../../api/constants';
 
 const Terms = () => {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
 
   // URL 쿼리스트링에서 token 파싱
   const token = searchParams.get('token');
 
-  useEffect(() => {
-    // 토큰이 없으면 잘못된 접근으로 간주하고 메인으로 이동
-    if (!token) {
-      alert('잘못된 접근입니다.');
-      navigate('/');
-    }
-  }, [token, navigate]);
+  // token이 없으면 read-only 모드 (마이페이지에서 접근)
 
   const handleAgree = async () => {
     if (!token) return;
@@ -371,51 +363,53 @@ const Terms = () => {
         </p>
       </div>
 
-      <div style={{ display: 'flex', gap: '15px' }}>
-        <button
-          onClick={handleAgree}
-          style={{
-            padding: '12px 24px',
-            cursor: 'pointer',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            fontSize: '16px',
-            fontWeight: 'bold',
-            transition: 'background-color 0.2s',
-          }}
-          onMouseOver={(e) =>
-            (e.currentTarget.style.backgroundColor = '#0056b3')
-          }
-          onMouseOut={(e) =>
-            (e.currentTarget.style.backgroundColor = '#007bff')
-          }
-        >
-          동의하고 시작하기
-        </button>
-        <button
-          onClick={handleDisagree}
-          style={{
-            padding: '12px 24px',
-            cursor: 'pointer',
-            backgroundColor: '#6c757d',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            fontSize: '16px',
-            transition: 'background-color 0.2s',
-          }}
-          onMouseOver={(e) =>
-            (e.currentTarget.style.backgroundColor = '#5a6268')
-          }
-          onMouseOut={(e) =>
-            (e.currentTarget.style.backgroundColor = '#6c757d')
-          }
-        >
-          동의하지 않음 (로그아웃)
-        </button>
-      </div>
+      {token && (
+        <div style={{ display: 'flex', gap: '15px' }}>
+          <button
+            onClick={handleAgree}
+            style={{
+              padding: '12px 24px',
+              cursor: 'pointer',
+              backgroundColor: '#007bff',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              fontSize: '16px',
+              fontWeight: 'bold',
+              transition: 'background-color 0.2s',
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.backgroundColor = '#0056b3')
+            }
+            onMouseOut={(e) =>
+              (e.currentTarget.style.backgroundColor = '#007bff')
+            }
+          >
+            동의하고 시작하기
+          </button>
+          <button
+            onClick={handleDisagree}
+            style={{
+              padding: '12px 24px',
+              cursor: 'pointer',
+              backgroundColor: '#6c757d',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              fontSize: '16px',
+              transition: 'background-color 0.2s',
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.backgroundColor = '#5a6268')
+            }
+            onMouseOut={(e) =>
+              (e.currentTarget.style.backgroundColor = '#6c757d')
+            }
+          >
+            동의하지 않음 (로그아웃)
+          </button>
+        </div>
+      )}
     </div>
   );
 };
