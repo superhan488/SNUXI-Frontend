@@ -100,7 +100,6 @@ const CreateRoom = () => {
     // UTC 변환 없이 사용자가 선택한 한국 시간 그대로 전송
     const departureTimeISO = `${departureTime}:00`;
 
-
     const roomDetails = {
       departureId,
       destinationId,
@@ -134,7 +133,11 @@ const CreateRoom = () => {
           return;
         }
         // 시간 관련 오류는 사용자에게 노출하지 않음 (effectiveTime으로 이미 보정)
-        if (errMsg.includes('이후') || errMsg.includes('시간') || errMsg.includes('time')) {
+        if (
+          errMsg.includes('이후') ||
+          errMsg.includes('시간') ||
+          errMsg.includes('time')
+        ) {
           alert('방 개설 중 오류가 발생했습니다. 다시 시도해주세요.');
           return;
         }

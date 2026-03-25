@@ -355,7 +355,8 @@ const MyPage = () => {
         <div className="mp-divider" />
 
         {/* 관리자 페이지 — superhan488@snu.ac.kr 전용 */}
-        {(email === 'superhan488@snu.ac.kr' || email === 'yujatea97@snu.ac.kr') && (
+        {(email === 'superhan488@snu.ac.kr' ||
+          email === 'yujatea97@snu.ac.kr') && (
           <>
             <button
               className="mp-list-item mp-list-btn"

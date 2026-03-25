@@ -26,6 +26,21 @@ import {
 import './ChatRoom.css';
 import type { Client } from '@stomp/stompjs';
 
+const maskName = (name: string) => {
+  const parts = name.split(' / ');
+  const chars = Array.from(parts[0].replace(/^[^가-힣a-zA-Z0-9]+/, ''));
+  if (chars.length >= 2) {
+    chars[1] = '*';
+    parts[0] = chars.join('');
+  } else {
+    parts[0] = chars.join('');
+  }
+  return parts.join(' / ');
+};
+
+const maskBotMessage = (text: string) =>
+  text.replace(/^(.+?)님이/, (_, name) => `${maskName(name)}님이`);
+
 const ChatRoom = () => {
   const { roomId } = useParams<{ roomId: string }>();
   const location = useLocation();
@@ -486,7 +501,7 @@ const ChatRoom = () => {
             const title = getBotNotificationTitle(msgText);
             showNotification(title, msgText, `/chat/${roomId}`);
           } else {
-            const sender = receivedMessage.senderUsername || '누군가';
+            const sender = maskName(receivedMessage.senderUsername || '누군가');
             showNotification(
               `${sender}님의 메시지`,
               msgText,
@@ -686,7 +701,7 @@ const ChatRoom = () => {
                 <div className="message-content-wrapper">
                   {!isMyMessage && !isBotMessage && (
                     <span className="sender-username">
-                      {msg.senderUsername}
+                      {maskName(msg.senderUsername)}
                     </span>
                   )}
 
@@ -708,7 +723,9 @@ const ChatRoom = () => {
                       className={`message-content ${isSelected ? 'clicked' : ''}`}
                       onClick={() => handleMessageClick(msg)}
                     >
-                      <p className="message-text">{msg.text}</p>
+                      <p className="message-text">
+                        {isBotMessage ? maskBotMessage(msg.text) : msg.text}
+                      </p>
                     </div>
                     {!isMyMessage && !isBotMessage && (
                       <div className="message-meta">

@@ -17,6 +17,18 @@ import { userIdAtom } from '../../common/user';
 import BellToggle from '../../components/BellToggle';
 import './MyChat.css';
 
+const maskName = (name: string) => {
+  const parts = name.split(' / ');
+  const chars = Array.from(parts[0].replace(/^[^가-힣a-zA-Z0-9]+/, ''));
+  if (chars.length >= 2) {
+    chars[1] = '*';
+    parts[0] = chars.join('');
+  } else {
+    parts[0] = chars.join('');
+  }
+  return parts.join(' / ');
+};
+
 const MyChat = () => {
   const userId = useAtomValue(userIdAtom);
   const navigate = useNavigate();
@@ -59,7 +71,13 @@ const MyChat = () => {
   const fetchPots = useCallback(async () => {
     try {
       const fetched = await getUserPots();
-      setPots([...fetched].sort((a, b) => new Date(a.departureTime).getTime() - new Date(b.departureTime).getTime()));
+      setPots(
+        [...fetched].sort(
+          (a, b) =>
+            new Date(a.departureTime).getTime() -
+            new Date(b.departureTime).getTime()
+        )
+      );
       const map: Record<number, Participant[]> = {};
       await Promise.all(
         fetched.map(async (pot) => {
@@ -357,7 +375,9 @@ const MyChat = () => {
                               </svg>
                             </div>
                           )}
-                          <span className="participant-name">{p.username}</span>
+                          <span className="participant-name">
+                            {maskName(p.username)}
+                          </span>
                           {p.role === 'OWNER' && (
                             <span className="participant-owner-tag">방장</span>
                           )}
@@ -481,7 +501,7 @@ const MyChat = () => {
               <div className="mc-kick-list">
                 {kickableParticipants.map((p) => (
                   <div key={p.userId} className="mc-kick-item">
-                    <span className="mc-kick-name">{p.username}</span>
+                    <span className="mc-kick-name">{maskName(p.username)}</span>
                     <button
                       className="mc-kick-btn"
                       onClick={() => handleConfirmKick(p.username, p.userId)}
