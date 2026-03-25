@@ -1,11 +1,13 @@
 import { AxiosError } from 'axios';
 import { useAtomValue } from 'jotai';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { BACKEND_URL } from '../../api/constants';
 import apiClient from '../../api/index';
 import { getLandmarks } from '../../api/map';
+import { getUserPots } from '../../api/room';
 import { isLoggedInAtom } from '../../common/user';
+import BellToggle from '../../components/BellToggle';
 import { type RoomData } from '../../types';
 import RoomCard from './RoomCard';
 import './RoomSearch.css';
@@ -49,6 +51,8 @@ const RoomSearch = () => {
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
 
+  const [myPotIds, setMyPotIds] = useState<Set<number>>(new Set());
+
   // --- 모달 상태 ---
   const [selectedRoomId, setSelectedRoomId] = useState<number | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -58,6 +62,14 @@ const RoomSearch = () => {
   const loadingRef = useRef(false);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
+
+  // 0. 내 팟 IDs 가져오기
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    getUserPots()
+      .then((pots) => setMyPotIds(new Set(pots.map((p) => p.id))))
+      .catch(() => setMyPotIds(new Set()));
+  }, [isLoggedIn]);
 
   // 1. 랜드마크 데이터 불러오기
   useEffect(() => {
@@ -200,6 +212,11 @@ const RoomSearch = () => {
 
   const handleJoinConfirm = async () => {
     if (!selectedRoomId) return;
+    if (myPotIds.size >= 3) {
+      alert('최대 3개 방을 참여할 수 있습니다.');
+      setShowJoinModal(false);
+      return;
+    }
     try {
       await apiClient.post(`/rooms/${selectedRoomId}/join`);
       navigate('/my-chat');
@@ -235,8 +252,15 @@ const RoomSearch = () => {
 
   return (
     <div className="search-container">
+      {/* 모바일 앱바 */}
+      <div className="mobile-app-bar">
+        <Link to="/" className="app-bar-logo">
+          SNUXI
+        </Link>
+        <BellToggle className="app-bar-bell" />
+      </div>
+
       <div className="sticky-header">
-        <h1>택시팟 찾기</h1>
         <div className="search-filter-card">
           <div className="filter-row">
             <select
@@ -267,16 +291,38 @@ const RoomSearch = () => {
       </div>
 
       <div className="room-list-scroll">
+        <div className="section-header">
+          <span className="section-title">지금 모집중</span>
+        </div>
         {rooms.length > 0
           ? rooms.map((room) => (
               <RoomCard
                 key={room.roomId}
                 room={room}
                 onClick={handleRoomClick}
+                isMyPot={myPotIds.has(room.roomId)}
               />
             ))
           : !loading && (
-              <div className="no-result">조건에 맞는 방이 없습니다.</div>
+              <div className="no-result">
+                <svg
+                  width="48"
+                  height="48"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M5 11l1.5-4.5h11L19 11" />
+                  <rect x="2" y="11" width="20" height="7" rx="2" />
+                  <circle cx="7" cy="18" r="2" />
+                  <circle cx="17" cy="18" r="2" />
+                  <path d="M2 15h20" />
+                </svg>
+                조건에 맞는 방이 없습니다.
+              </div>
             )}
 
         {hasMore && (
@@ -347,7 +393,8 @@ const modalOverlayStyle: React.CSSProperties = {
   left: 0,
   width: '100%',
   height: '100%',
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  backgroundColor: 'rgba(30, 27, 75, 0.45)',
+  backdropFilter: 'blur(3px)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -356,40 +403,43 @@ const modalOverlayStyle: React.CSSProperties = {
 
 const modalContentStyle: React.CSSProperties = {
   backgroundColor: 'white',
-  padding: '24px',
-  borderRadius: '12px',
+  padding: '28px',
+  borderRadius: '20px',
   width: '80%',
   maxWidth: '300px',
   textAlign: 'center',
-  boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+  boxShadow: '0 8px 32px rgba(79, 70, 229, 0.16)',
+  border: '1.5px solid #e8e5ff',
 };
 
 const buttonGroupStyle: React.CSSProperties = {
   display: 'flex',
   justifyContent: 'space-between',
   marginTop: '20px',
-  gap: '10px',
+  gap: '8px',
 };
 
 const cancelButtonStyle: React.CSSProperties = {
   flex: 1,
-  padding: '10px',
+  padding: '11px',
   borderRadius: '8px',
-  border: '1px solid #ccc',
-  backgroundColor: '#f5f5f5',
+  border: '1.5px solid #e8e5ff',
+  backgroundColor: '#f5f3ff',
   cursor: 'pointer',
+  fontWeight: '600',
+  color: '#64748b',
 };
 
 const confirmButtonStyle: React.CSSProperties = {
   flex: 1,
-  padding: '10px',
+  padding: '11px',
   borderRadius: '8px',
   border: 'none',
-  backgroundColor: '#007bff', // [수정] 마이페이지 파란색 적용
+  background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
   color: 'white',
   cursor: 'pointer',
-  fontWeight: 'bold',
-  transition: 'background-color 0.2s', // 부드러운 색상 전환 추가
+  fontWeight: '700',
+  boxShadow: '0 3px 10px rgba(79, 70, 229, 0.3)',
 };
 
 export default RoomSearch;

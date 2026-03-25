@@ -1,96 +1,158 @@
-/* 전체 레이아웃 */
+/* CreateRoom */
 .create-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 20px 16px;
-  font-family: Arial, sans-serif;
-  background-color: #ffffff;
+  padding: 20px 16px 40px;
+  background-color: var(--bg-base);
   min-height: calc(100vh - 60px);
-
   max-width: 480px;
   margin: 0 auto;
 }
 
-/* 로딩 */
+@media (max-width: 768px) {
+  .create-container {
+    min-height: calc(100vh - 60px);
+    padding: 16px 16px 32px;
+  }
+}
+
 .loading-container {
   justify-content: center;
   align-items: center;
   height: 80vh;
 }
 .loading-text {
-  color: #868e96;
+  color: var(--text-muted);
   font-size: 1rem;
 }
 
-h1 {
-  color: #333;
-  margin: 25px 0 25px 0;
-  font-size: 1.725rem;
-  text-align: center;
+/* App bar */
+.create-app-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 16px 14px;
+  background: #ffffff;
+  margin: -20px -16px 0;
 }
 
+.create-app-bar-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--brand-primary);
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.create-app-bar-bell {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .create-app-bar {
+    margin: -16px -16px 0;
+  }
+}
+
+/* Title */
+.create-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 16px 0 16px;
+  letter-spacing: -0.01em;
+}
+
+.create-title-accent {
+  color: var(--brand-primary);
+}
+
+/* Cards */
 .card {
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid #f1f3f5;
-  padding: 20px;
-  margin-bottom: 16px;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  padding: 16px;
+  margin-bottom: 10px;
   width: 100%;
   box-sizing: border-box;
 }
 
-/* 출발지/도착지 */
+.card-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+}
+
+/* Route selector */
 .location-box {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .location-select {
   flex: 1;
-  text-align: center;
   min-width: 0;
 }
 
 .location-select select {
-  border: none;
-  background: transparent;
-  font-size: 16px;
   width: 100%;
-  text-align: center;
+  border: 1.5px solid var(--border);
+  background: var(--bg-base);
+  border-radius: var(--radius-sm);
+  padding: 10px 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
   outline: none;
-  font-weight: bold;
-  color: #333;
   cursor: pointer;
   text-overflow: ellipsis;
 }
 
-.arrow {
-  font-size: 18px;
-  color: #adb5bd;
+.location-select select:focus {
+  border-color: var(--brand-primary);
+}
+
+/* Swap button */
+.swap-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: #eff6ff;
+  color: var(--brand-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
   flex-shrink: 0;
+  transition: background-color 0.15s;
 }
 
-.input-group label {
-  display: block;
-  margin-bottom: 12px;
-  color: #495057;
-  font-size: 14px;
-  font-weight: 600;
+.swap-btn:hover {
+  background: #dbeafe;
 }
 
-/* --- 커스텀 날짜 선택기 스타일 (수정됨) --- */
+/* Date picker */
 .custom-date-input-wrapper {
   position: relative;
   width: 100%;
   height: 50px;
-  cursor: pointer; /* 커서가 손가락 모양으로 바뀌도록 추가 */
+  cursor: pointer;
 }
 
-/* [수정] 실제 input은 클릭을 방해하지 않도록 뒤로 숨김 */
 .hidden-date-input {
   position: absolute;
   top: 0;
@@ -98,107 +160,178 @@ h1 {
   width: 100%;
   height: 100%;
   opacity: 0;
-  z-index: -1; /* 뒤로 보냄 */
-  pointer-events: none; /* 클릭 이벤트를 받지 않음 (div가 받아서 js로 처리) */
+  z-index: -1;
+  pointer-events: none;
 }
 
-/* 눈에 보이는 디자인 박스 */
 .date-display-box {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  background-color: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-base);
   display: flex;
   align-items: center;
-  padding: 0 16px;
+  padding: 0 14px;
   box-sizing: border-box;
-  color: #adb5bd;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-/* hover 효과 추가 */
-.custom-date-input-wrapper:hover .date-display-box {
-  border-color: #adb5bd;
+  color: var(--text-muted);
+  transition: border-color 0.2s;
 }
 
 .date-display-box.active {
-  color: #333;
-  font-weight: 500;
-  border-color: #007bff; /* 선택되면 파란 테두리 */
-}
-
-.calendar-icon {
-  margin-right: 10px;
-  font-size: 18px;
+  color: var(--text-primary);
+  font-weight: 600;
+  border-color: var(--brand-primary);
 }
 
 .date-text {
-  font-size: 16px;
+  font-size: 0.95rem;
 }
-/* -------------------------------- */
 
-/* 인원 조절 */
-.participant-control {
+/* Participant row */
+.participant-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #f8f9fa;
-  padding: 8px 12px;
-  border-radius: 8px;
+}
+
+.participant-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.participant-control {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--bg-base);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
 }
 
 .participant-control button {
-  background-color: #ffffff;
-  border: 1px solid #dee2e6;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  background: none;
+  border: none;
+  width: 28px;
+  height: 28px;
   font-size: 18px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #333;
-  transition: all 0.2s;
+  color: var(--brand-primary);
+  font-weight: 700;
+  border-radius: 50%;
+  transition: background-color 0.15s;
 }
 
-.participant-control button:active {
-  background-color: #e9ecef;
+.participant-control button:hover:not(:disabled) {
+  background: #dbeafe;
 }
 
 .participant-control button:disabled {
   opacity: 0.3;
   cursor: not-allowed;
-  background-color: #f1f3f5;
-  border-color: #e9ecef;
 }
 
 .participant-control span {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  min-width: 20px;
+  text-align: center;
 }
 
-/* 방 개설 버튼 */
+/* Notification toggle */
+.notify-toggle-card {
+  padding: 14px 16px;
+}
+
+.notify-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.notify-toggle-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.notify-toggle-label {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.notify-toggle-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.cr-toggle {
+  position: relative;
+  width: 48px;
+  height: 28px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.25s;
+  padding: 0;
+}
+
+.cr-toggle.on {
+  background: var(--brand-primary);
+}
+.cr-toggle.off {
+  background: var(--border);
+}
+
+.cr-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  transition: left 0.25s;
+}
+
+.cr-toggle.on .cr-toggle-thumb {
+  left: calc(100% - 25px);
+}
+.cr-toggle.off .cr-toggle-thumb {
+  left: 3px;
+}
+
+/* Create button */
 .create-button {
   width: 100%;
-  padding: 16px;
+  padding: 11px;
   border: none;
-  border-radius: 10px;
-  background-color: #007bff;
+  border-radius: var(--radius-md);
+  background: var(--brand-gradient);
   color: white;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 1rem;
+  font-weight: 800;
   cursor: pointer;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  transition: background-color 0.2s;
+  margin-top: 12px;
+  transition: opacity 0.2s, transform 0.1s;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  letter-spacing: -0.01em;
 }
 
 .create-button:hover {
-  background-color: #0069d9;
+  opacity: 0.92;
+}
+.create-button:active {
+  transform: scale(0.98);
 }

@@ -6,22 +6,23 @@ import {
   useRef,
   useState,
 } from 'react';
-import { FaBars, FaBell } from 'react-icons/fa';
+import { FaBell } from 'react-icons/fa';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { getLandmarks } from '../../api/map';
 import type { Message } from '../../api/room';
 import {
-  type Participant,
   getCurrentPot,
   getKakaoDeepLink,
   getMessages,
-  getRoomParticipants,
-  kickUserFromRoom,
   markAsRead,
   reportMessage,
-  updateRoomStatus,
 } from '../../api/room';
 import { createStompClient } from '../../api/websocket';
 import { isLoggedInAtom, userIdAtom } from '../../common/user';
+import {
+  getBotNotificationTitle,
+  showNotification,
+} from '../../utils/notifications';
 import './ChatRoom.css';
 import type { Client } from '@stomp/stompjs';
 
@@ -48,16 +49,29 @@ const ChatRoom = () => {
   const [isLoggedIn] = useAtom(isLoggedInAtom);
   const [userId] = useAtom(userIdAtom);
   const [newMessage, setNewMessage] = useState('');
-  const [roomOwnerId, setRoomOwnerId] = useState<number | null>(null);
-  const [showMenu, setShowMenu] = useState(false);
+  const [routeInfo, setRouteInfo] = useState<{
+    departure: string;
+    destination: string;
+    departureTime: string;
+    currentCount: number;
+    maxCapacity: number;
+  } | null>(
+    (() => {
+      const s = location.state as Record<string, unknown> | null;
+      if (s?.departure && s?.destination) {
+        return {
+          departure: s.departure as string,
+          destination: s.destination as string,
+          departureTime: s.departureTime as string,
+          currentCount: (s.currentCount as number) ?? 0,
+          maxCapacity: (s.maxCapacity as number) ?? 4,
+        };
+      }
+      return null;
+    })()
+  );
   const [showTaxiLinkModal, setShowTaxiLinkModal] = useState(false);
   const [taxiLink, setTaxiLink] = useState<string | null>(null);
-  const [showKickUserModal, setShowKickUserModal] = useState(false);
-  const [participants, setParticipants] = useState<Participant[]>([]);
-
-  // 모집 상태 관리
-  const [showStatusModal, setShowStatusModal] = useState(false);
-  const [isLocked, setIsLocked] = useState(false);
 
   // 신고하기 모달 상태
   const [showReportModal, setShowReportModal] = useState(false);
@@ -74,7 +88,6 @@ const ChatRoom = () => {
   const isInitialLoadComplete = useRef(false);
   const isAtBottomRef = useRef(true);
   const lastMessageIdRef = useRef<number | null>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
 
   const initialUnreadCount =
     (location.state as { unreadCount?: number })?.unreadCount || 0;
@@ -85,32 +98,44 @@ const ChatRoom = () => {
   const totalMembers =
     (location.state as { totalMembers?: number })?.totalMembers || 2;
 
-  // Fetch Owner & Current Status
+  // Fetch route info if not passed via navigation state
   useEffect(() => {
-    if (isLoggedIn && roomId) {
-      const fetchOwnerAndStatus = async () => {
+    if (isLoggedIn && roomId && !routeInfo) {
+      const fetchRouteInfo = async () => {
         try {
-          const pot = await getCurrentPot();
-          if (pot && pot.id === parseInt(roomId, 10)) {
-            setRoomOwnerId(pot.ownerId);
-            setIsLocked(pot.isLocked);
+          const [pot, landmarksData] = await Promise.all([
+            getCurrentPot(),
+            getLandmarks(),
+          ]);
+          if (
+            pot &&
+            pot.id === parseInt(roomId, 10) &&
+            landmarksData?.landmarks
+          ) {
+            const lmap: Record<number, string> = {};
+            // biome-ignore lint/suspicious/noExplicitAny:
+            landmarksData.landmarks.forEach((l: any) => {
+              lmap[l.id] = l.name;
+            });
+            setRouteInfo({
+              departure: lmap[pot.departureId] || '출발지',
+              destination: lmap[pot.destinationId] || '도착지',
+              departureTime: pot.departureTime,
+              currentCount: pot.currentCount,
+              maxCapacity: pot.maxCapacity,
+            });
           }
         } catch (error) {
-          console.error('Error fetching current pot:', error);
+          console.error('Error fetching route info:', error);
         }
       };
-      fetchOwnerAndStatus();
+      fetchRouteInfo();
     }
-  }, [isLoggedIn, roomId]);
+  }, [isLoggedIn, roomId, routeInfo]);
 
-  const isOwner = userId === roomOwnerId;
-
-  // 메뉴 외부 클릭 시 닫기
+  // 메시지 외부 클릭 시 선택 해제
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setShowMenu(false);
-      }
       if (
         !(event.target as HTMLElement).closest('.message-bubble') &&
         !(event.target as HTMLElement).closest('.report-button')
@@ -118,11 +143,8 @@ const ChatRoom = () => {
         setSelectedMessageId(null);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   // Effects
@@ -182,27 +204,6 @@ const ChatRoom = () => {
     }
   };
 
-  const handleOpenStatusModal = () => {
-    setShowStatusModal(true);
-    setShowMenu(false);
-  };
-
-  const handleToggleStatus = async () => {
-    if (!roomId) return;
-    try {
-      const newStatus = !isLocked;
-      await updateRoomStatus(parseInt(roomId, 10), newStatus);
-      setIsLocked(newStatus);
-      alert(
-        `모집 상태가 ${newStatus ? '모집중지' : '모집중'}으로 변경되었습니다.`
-      );
-      setShowStatusModal(false);
-    } catch (error) {
-      console.error('Error updating room status:', error);
-      alert('모집 상태 변경에 실패했습니다.');
-    }
-  };
-
   const handleGetTaxiLink = async () => {
     if (!roomId) return;
     try {
@@ -211,41 +212,15 @@ const ChatRoom = () => {
       setShowTaxiLinkModal(true);
     } catch (error) {
       console.error('Error getting Kakao Deep Link:', error);
-      alert('카카오택시 링크를 가져오는데 실패했습니다.');
-    } finally {
-      setShowMenu(false);
-    }
-  };
-
-  const handleKickUser = async () => {
-    if (!roomId) return;
-    try {
-      const allParticipants = await getRoomParticipants(parseInt(roomId, 10));
-      const kickableParticipants = allParticipants.filter(
-        (p) => p.userId !== userId
-      );
-      setParticipants(kickableParticipants);
-      setShowKickUserModal(true);
-    } catch (error) {
-      console.error('Error fetching participants:', error);
-      alert('참가자 목록을 불러오는데 실패했습니다.');
-    } finally {
-      setShowMenu(false);
-    }
-  };
-
-  const handleConfirmKick = async (username: string, userId: number) => {
-    if (!roomId) return;
-    if (window.confirm(`${username} 님을 강퇴하시겠습니까?`)) {
-      try {
-        await kickUserFromRoom(parseInt(roomId, 10), userId);
-        alert(`${username} 님이 강퇴되었습니다.`);
-      } catch (error) {
-        console.error('Error kicking user:', error);
-        alert('사용자 강퇴에 실패했습니다.');
-      } finally {
-        setShowKickUserModal(false);
-      }
+      const axiosErr = error as import('axios').AxiosError<{
+        errMsg?: string;
+        message?: string;
+      }>;
+      const msg =
+        axiosErr.response?.data?.errMsg ||
+        axiosErr.response?.data?.message ||
+        '카카오택시 링크를 가져오는데 실패했습니다.';
+      alert(msg);
     }
   };
 
@@ -314,7 +289,13 @@ const ChatRoom = () => {
           setMessages(sortedItems);
           setCursor(finalNextCursor);
           setHasNext(finalHasNext);
-          setReadStatuses(finalReadStatuses);
+          // Inject current user's effective read so own messages don't appear unread
+          const effectiveReadStatuses = { ...finalReadStatuses };
+          if (userId && sortedItems.length > 0) {
+            effectiveReadStatuses[userId] =
+              sortedItems[sortedItems.length - 1].id;
+          }
+          setReadStatuses(effectiveReadStatuses);
 
           if (sortedItems.length > 0) {
             lastMessageIdRef.current = sortedItems[sortedItems.length - 1].id;
@@ -490,6 +471,29 @@ const ChatRoom = () => {
         const receivedMessage = JSON.parse(message.body);
         setMessages((prevMessages) => [...prevMessages, receivedMessage]);
         markAsRead(parseInt(roomId, 10), receivedMessage.id);
+        if (userId) {
+          setReadStatuses((prev) => ({
+            ...prev,
+            [userId]: receivedMessage.id,
+          }));
+        }
+
+        // 탭이 백그라운드 상태일 때 알림 표시 (내 메시지 제외)
+        if (document.hidden) {
+          const isBotMessage = receivedMessage.senderId === 7;
+          const msgText = receivedMessage.text || '';
+          if (isBotMessage) {
+            const title = getBotNotificationTitle(msgText);
+            showNotification(title, msgText, `/chat/${roomId}`);
+          } else {
+            const sender = receivedMessage.senderUsername || '누군가';
+            showNotification(
+              `${sender}님의 메시지`,
+              msgText,
+              `/chat/${roomId}`
+            );
+          }
+        }
       });
       client.subscribe(`/sub/rooms/${roomId}/read`, (message) => {
         const { userId: readUserId, lastReadMessageId } = JSON.parse(
@@ -505,7 +509,7 @@ const ChatRoom = () => {
     return () => {
       client.deactivate();
     };
-  }, [roomId, isLoggedIn]);
+  }, [roomId, isLoggedIn, userId]);
 
   const sendMessage = () => {
     if (clientRef.current && newMessage.trim() !== '' && roomId) {
@@ -531,25 +535,84 @@ const ChatRoom = () => {
     );
   }
 
+  const routeDeparture = routeInfo?.departure ?? '';
+  const routeDestination = routeInfo?.destination ?? '';
+  const routeDepartureTime = routeInfo?.departureTime ?? '';
+  const routeCurrentCount = routeInfo?.currentCount ?? 0;
+  const routeMaxCapacity = routeInfo?.maxCapacity ?? 4;
+
+  const chatTimeLabel = (() => {
+    if (!routeDepartureTime) return '';
+    const d = new Date(routeDepartureTime);
+    const now = new Date();
+    const isToday = d.toDateString() === now.toDateString();
+    const time = d.toLocaleTimeString('ko-KR', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
+    return isToday
+      ? `오늘 ${time}`
+      : `${d.getMonth() + 1}/${d.getDate()} ${time}`;
+  })();
+
   return (
     <div className="chat-room-container">
-      {isOwner && (
-        <div className="menu-container" ref={menuRef}>
-          <button
-            className="menu-button"
-            onClick={() => setShowMenu(!showMenu)}
+      {/* 채팅방 헤더 */}
+      <div className="chat-header">
+        <button className="chat-back-btn" onClick={() => navigate(-1)}>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
-            <FaBars />
-          </button>
-          {showMenu && (
-            <div className="menu-dropdown">
-              <button onClick={handleOpenStatusModal}>모집 상태 변경</button>
-              <button onClick={handleGetTaxiLink}>택시 호출 링크</button>
-              <button onClick={handleKickUser}>사용자 강퇴</button>
-            </div>
+            <path d="M19 12H5M12 5l-7 7 7 7" />
+          </svg>
+        </button>
+        <div className="chat-header-center">
+          {routeDeparture ? (
+            <>
+              <div className="chat-header-route">
+                {routeDeparture} → {routeDestination}
+              </div>
+              <div className="chat-header-sub">
+                {routeCurrentCount}/{routeMaxCapacity}명 · {chatTimeLabel}
+              </div>
+            </>
+          ) : (
+            <div className="chat-header-route">팟 채팅방</div>
           )}
         </div>
-      )}
+        <div className="chat-header-right">
+          <button
+            className="taxi-call-btn"
+            onClick={handleGetTaxiLink}
+            title="카카오택시 호출"
+          >
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M5 11l1.5-4.5h11L19 11" />
+              <rect x="2" y="11" width="20" height="7" rx="2" />
+              <circle cx="7" cy="18" r="2" />
+              <circle cx="17" cy="18" r="2" />
+              <path d="M2 15h20" />
+            </svg>
+          </button>
+        </div>
+      </div>
 
       <div
         className="messages-container"
@@ -708,39 +771,6 @@ const ChatRoom = () => {
         </button>
       </div>
 
-      {/* 모집 상태 변경 모달 */}
-      {showStatusModal && (
-        <div
-          className="modal-overlay"
-          onClick={() => setShowStatusModal(false)}
-        >
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h3>모집 상태 변경</h3>
-            <p>
-              현재 상태: <strong>{isLocked ? '모집중지' : '모집중'}</strong>
-            </p>
-            <p>
-              상태를 <strong>{isLocked ? '모집중' : '모집중지'}</strong>으로
-              변경하시겠습니까?
-            </p>
-            <div className="modal-actions">
-              <button
-                className="action-button primary"
-                onClick={handleToggleStatus}
-              >
-                변경하기
-              </button>
-              <button
-                className="action-button secondary"
-                onClick={() => setShowStatusModal(false)}
-              >
-                취소
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* 카카오택시 링크 모달 */}
       {showTaxiLinkModal && taxiLink && (
         <div
@@ -761,47 +791,6 @@ const ChatRoom = () => {
             <button
               className="close-button"
               onClick={() => setShowTaxiLinkModal(false)}
-            >
-              닫기
-            </button>
-          </div>
-        </div>
-      )}
-
-      {showKickUserModal && (
-        <div
-          className="modal-overlay"
-          onClick={() => setShowKickUserModal(false)}
-        >
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h3>사용자 강퇴</h3>
-            <div className="participant-list">
-              {participants.length > 0 ? (
-                participants.map((p) => (
-                  <div key={p.userId} className="participant-item">
-                    <img
-                      src={
-                        p.profileImageUrl || 'https://via.placeholder.com/30'
-                      }
-                      alt={p.username}
-                      className="participant-profile-pic"
-                    />
-                    <span>{p.username}</span>
-                    <button
-                      className="kick-button"
-                      onClick={() => handleConfirmKick(p.username, p.userId)}
-                    >
-                      강퇴
-                    </button>
-                  </div>
-                ))
-              ) : (
-                <p>강퇴할 사용자가 없습니다.</p>
-              )}
-            </div>
-            <button
-              className="close-button"
-              onClick={() => setShowKickUserModal(false)}
             >
               닫기
             </button>

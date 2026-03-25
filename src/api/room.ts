@@ -58,16 +58,25 @@ export const createRoom = async (
 };
 
 export const getCurrentPot = async (): Promise<Pot | null> => {
-  const response = await apiClient.get<Pot>('/users/me/pot');
-  if (!response.data) {
-    return null;
-  }
-  return response.data;
+  const response = await apiClient.get<Pot[]>('/users/me/pots');
+  const data = response.data;
+  if (!data || data.length === 0) return null;
+  return data[0];
+};
+
+export const getUserPots = async (): Promise<Pot[]> => {
+  const response = await apiClient.get<Pot[]>('/users/me/pots');
+  return response.data ?? [];
 };
 
 // 방 나가기 API
 export const leaveRoom = async (roomId: number): Promise<void> => {
   await apiClient.post(`/rooms/${roomId}/leave`);
+};
+
+// 방 삭제 API (방장만 가능)
+export const deleteRoom = async (roomId: number): Promise<void> => {
+  await apiClient.delete(`/rooms/${roomId}`);
 };
 
 export const getMessages = async (

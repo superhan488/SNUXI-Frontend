@@ -1,228 +1,362 @@
-.mypage-container {
-  max-width: 500px;
-  margin: 40px auto;
-  padding: 20px;
-  text-align: center;
+/* MyPage */
+.mp-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 16px 40px;
+  background-color: var(--bg-base);
+  min-height: calc(100vh - 60px);
 }
 
-.mypage-profile-card {
-  background: white;
-  border-radius: 12px;
-  padding: 30px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.mp-app-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 -16px;
+  padding: 18px 16px 14px;
+  background: #ffffff;
+}
+
+.mp-app-bar-bell {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+}
+
+.mp-app-bar-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--brand-primary);
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .mp-container {
+    min-height: calc(100vh - 60px);
+    padding: 16px 16px 32px;
+  }
+}
+
+.mp-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 20px 0 16px;
+  padding-left: 4px;
+  letter-spacing: -0.02em;
+}
+
+/* 로그인 안 된 상태 */
+.mp-not-logged-in {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
-/* 프로필 이미지 스타일 */
-.mypage-profile-image-wrapper {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 3px solid #eee;
-}
-
-.mypage-profile-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.mypage-profile-image.editable {
-  cursor: pointer;
-}
-
-/* 수정 모드일 때 이미지 위에 '변경' 텍스트 띄우기 */
-.mypage-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
-  pointer-events: none; /* 클릭은 부모(wrapper)가 받음 */
-}
-
-/* 정보 텍스트 영역 */
-.mypage-profile-info {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 15px;
-}
-
-.mypage-info-row {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 5px;
-}
-
-.mypage-info-row label {
-  font-size: 0.85rem;
-  color: #888;
-  font-weight: bold;
-}
-
-.mypage-email-text,
-.mypage-nickname-text {
-  font-size: 1.1rem;
-  color: #333;
-}
-
-.mypage-nickname-input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  margin-top: 100px;
+  gap: 16px;
+  color: var(--text-secondary);
   font-size: 1rem;
 }
 
-/* 버튼 스타일 */
-.mypage-button-group {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-  width: 100%;
-  justify-content: center;
+.mp-not-logged-icon {
+  color: var(--border);
 }
 
-.mypage-edit-btn,
-.mypage-save-btn {
-  background-color: #007bff;
+.mp-login-btn {
+  background: var(--brand-gradient);
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
+  padding: 12px 32px;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
-  font-weight: bold;
+  box-shadow: 0 3px 12px rgba(37, 99, 235, 0.3);
 }
 
-.mypage-cancel-btn {
-  background-color: #f1f3f5;
-  color: #333;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.mypage-edit-btn:hover,
-.mypage-save-btn:hover {
-  background-color: #0056b3;
-}
-
-.mypage-withdraw-btn {
-  background-color: #f1f3f5;
-  color: #495057;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.mypage-withdraw-btn:hover {
-  background-color: #e9ecef;
-  color: #343a40;
-}
-
-/* Modal Styles - 이름을 변경하여 충돌 방지 */
-.mypage-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+/* 프로필 카드 */
+.mp-profile-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 1000;
+  gap: 14px;
+  margin-bottom: 20px;
 }
 
-.mypage-modal-content {
-  background-color: #ffffff;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  max-width: 90%;
-  width: 500px;
-  text-align: center;
+.mp-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.mp-avatar-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--brand-primary);
+}
+
+.mp-avatar-initial {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--brand-gradient);
+  color: #ffffff;
+  font-size: 1.4rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mp-avatar-edit-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+
+.mp-profile-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.mp-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.mp-nickname-input {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1.5px solid var(--brand-primary);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  outline: none;
+  background: var(--bg-base);
+  margin-bottom: 4px;
+}
+
+.mp-email {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mp-profile-actions {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  max-height: 80vh;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
-.mypage-modal-content h3 {
-  margin: 0 0 10px 0;
-  font-size: 1.2rem;
-  color: #333;
+.mp-btn-edit {
+  padding: 8px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s;
 }
 
-.mypage-terms-content {
+.mp-btn-edit:hover {
+  background: var(--bg-base);
+}
+
+.mp-btn-save {
+  padding: 8px 14px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--brand-gradient);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.mp-btn-cancel {
+  padding: 8px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* 섹션 라벨 */
+.mp-section-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+  padding: 0 2px;
+}
+
+/* 설정 리스트 */
+.mp-list {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.mp-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+}
+
+.mp-list-btn {
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
   text-align: left;
+  transition: background-color 0.15s;
+}
+
+.mp-list-btn:hover {
+  background: var(--bg-base);
+}
+
+.mp-list-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mp-list-icon {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.mp-list-icon.logout {
+  color: #ef4444;
+}
+
+.mp-list-text {
   font-size: 0.95rem;
-  color: #555;
-  line-height: 1.6;
-  overflow-y: auto;
-  padding-right: 10px;
+  font-weight: 500;
+  color: var(--text-primary);
 }
 
-.mypage-terms-content strong {
-  color: #333;
+.mp-list-text.logout {
+  color: #ef4444;
+  font-weight: 600;
 }
 
-.mypage-terms-content ul {
-  list-style-type: disc;
-  margin-left: 20px;
+.mp-chevron {
+  color: var(--text-muted);
+}
+
+.mp-divider {
+  height: 1px;
+  background: var(--bg-base);
+  margin: 0 16px;
+}
+
+/* 알림 토글 */
+.mp-notify-item {
+  gap: 0;
+}
+
+.mp-notify-denied {
+  font-size: 0.72rem;
+  color: #f97316;
+  margin-top: 3px;
+}
+
+.mp-toggle {
+  position: relative;
+  width: 46px;
+  height: 26px;
+  border-radius: 13px;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.25s;
   padding: 0;
 }
 
-.mypage-terms-content li {
-  margin-bottom: 5px;
+.mp-toggle.on {
+  background: var(--brand-primary);
+}
+.mp-toggle.off {
+  background: #d1d5db;
+}
+.mp-toggle:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
-.mypage-close-button {
-  background-color: #007bff;
-  color: #ffffff;
+.mp-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: left 0.25s;
+}
+
+.mp-toggle.on .mp-toggle-thumb {
+  left: calc(100% - 23px);
+}
+.mp-toggle.off .mp-toggle-thumb {
+  left: 3px;
+}
+
+/* 회원탈퇴 */
+.mp-withdraw-btn {
+  background: none;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  color: var(--text-muted);
+  font-size: 0.82rem;
   cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.2s;
-  margin-top: 10px;
-}
-
-.mypage-close-button:hover {
-  background-color: #0056b3;
-}
-
-/* [추가] 로그인 안 했을 때 메시지 스타일 (MyChat과 유사하게) */
-.mypage-no-login-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 100px; /* MyChat의 margin-top: 100px과 동일 */
-  gap: 20px;
-}
-
-.mypage-no-login-text {
+  text-decoration: underline;
+  margin-top: 20px;
+  display: block;
+  width: 100%;
   text-align: center;
-  color: #000000;
-  font-size: 1.1rem; /* MyChat의 font-size: 1.1rem과 동일 */
-  font-weight: 500; /* MyChat의 font-weight: 500과 동일 */
+  transition: color 0.15s;
+}
+
+.mp-withdraw-btn:hover {
+  color: #ef4444;
 }

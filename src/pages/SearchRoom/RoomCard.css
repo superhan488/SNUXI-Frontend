@@ -1,142 +1,153 @@
-/* 카드 기본 스타일 */
+/* RoomCard */
 .room-card {
-  background: white;
-  border-radius: 12px;
+  position: relative;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
   padding: 16px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f1f3f5;
+  border: 1px solid var(--border);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: box-shadow 0.18s;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
 .room-card:active {
-  transform: scale(0.98);
+  transform: scale(0.985);
 }
 
-/* 1. 경로 행 스타일 (수정됨) */
-.room-route-row {
-  display: flex;
-  flex-direction: column; /* 세로 배치로 변경 */
-  align-items: flex-start; /* 왼쪽 정렬 */
-  gap: 4px; /* 출발지와 도착지 줄 사이 간격 */
-  font-size: 1.05rem;
+.room-card.my-pot {
+  border-color: var(--brand-primary);
+  border-width: 1.5px;
+  cursor: default;
+}
+
+.my-pot-badge {
+  font-size: 0.72rem;
   font-weight: 700;
-  color: #212529;
+  color: var(--brand-primary);
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  padding: 2px 8px;
 }
 
-/* 화살표와 도착지를 묶는 컨테이너 (새로 추가) */
-.route-destination-row {
+/* 경로 행 */
+.rc-route {
   display: flex;
   align-items: center;
-  gap: 8px;
-  width: 100%;
+  gap: 0;
 }
 
-.location {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  /* 한 줄 전체를 쓸 수 있으므로 너비 제한을 100%로 변경 */
-  max-width: 100%;
+.rc-node {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  max-width: 38%;
 }
 
-.arrow {
-  color: #adb5bd;
-  font-weight: normal;
+.rc-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--brand-primary);
   flex-shrink: 0;
 }
 
-/* 2. 상세 정보 (시간, 요금) 스타일 */
-.room-details-row {
-  display: flex;
-  align-items: center;
-  font-size: 0.9rem;
-  color: #495057;
-  gap: 6px;
+.rc-dot.dest {
+  background: #10b981;
 }
 
-.info-item {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.info-divider {
-  color: #dee2e6;
-  margin: 0 2px;
-}
-
-.fee {
-  font-weight: 600;
-  color: #495057;
-}
-
-/* 3. 하단 (방장, 상태) 스타일 */
-.room-footer-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  border-top: 1px solid #f8f9fa;
-  padding-top: 10px;
-  margin-top: 2px;
-}
-
-.host-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  font-size: 0.8rem;
-  max-width: 60%;
-}
-
-.host-label {
-  color: #adb5bd;
-  font-size: 0.75rem;
-}
-
-.host-name {
-  color: #495057;
-  font-weight: 500;
+.rc-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.status-container {
+.rc-line {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+  min-width: 20px;
+}
+
+.rc-dash {
+  display: block;
+  width: 100%;
+  border-top: 1.5px dashed var(--border);
+}
+
+/* 태그 */
+.rc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.rc-chip {
+  font-size: 0.78rem;
+  background: var(--bg-base);
+  color: var(--text-secondary);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+}
+
+/* 하단 */
+.rc-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 8px;
+  border-top: 1px solid var(--bg-base);
+}
+
+.rc-host {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.rc-right {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.status-badge {
-  font-size: 0.8rem;
-  padding: 4px 8px;
-  border-radius: 6px;
+.rc-badge {
+  font-size: 0.73rem;
   font-weight: 700;
-  margin-left: 8px;
+  padding: 3px 10px;
+  border-radius: 20px;
 }
 
-.status-badge.recruiting {
-  background-color: #e6fcf5;
-  color: #0ca678;
+.rc-badge.recruiting {
+  background: #ecfdf5;
+  color: #059669;
 }
 
-.status-badge.success {
-  background-color: #e7f5ff;
-  color: #1c7ed6;
+.rc-badge.success {
+  background: #eff6ff;
+  color: #2563eb;
 }
 
-.status-badge.closed {
-  background-color: #f1f3f5;
-  color: #adb5bd;
+.rc-badge.soon {
+  background: #fff7ed;
+  color: #f97316;
 }
 
-.headcount-fixed {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #000000;
-  margin-left: 8px; /* 배지와의 간격 */
+.rc-badge.closed {
+  background: var(--bg-base);
+  color: var(--text-muted);
+}
+
+.rc-count {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
 }

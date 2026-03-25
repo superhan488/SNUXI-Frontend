@@ -1,33 +1,86 @@
-/* 전체 컨테이너 */
+/* ChatRoom */
 .chat-room-container {
   display: flex;
   flex-direction: column;
-  height: calc(100dvh - 60px);
+  height: 100dvh;
   max-width: 480px;
   margin: 0 auto;
-  background-color: #ffffff;
+  background-color: var(--bg-base);
   position: relative;
-  border-left: 1px solid #eee;
-  border-right: 1px solid #eee;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
   overflow: hidden;
 }
 
-/* 초기 로딩 화면 */
+/* 채팅방 헤더 */
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  height: 56px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.chat-back-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-primary);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.chat-header-center {
+  flex: 1;
+  text-align: center;
+  min-width: 0;
+  padding: 0 4px;
+}
+
+.chat-header-route {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-header-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.chat-header-right {
+  position: relative;
+  flex-shrink: 0;
+}
+
 .chat-room-container.loading-screen {
   justify-content: center;
   align-items: center;
 }
 
-/* 메시지 목록 영역 */
+/* Messages area */
 .messages-container {
   flex-grow: 1;
   position: relative;
   overflow-y: auto;
-  padding: 60px 1rem 1rem 1rem;
+  padding: 12px 14px 14px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  background-color: #ffffff;
+  gap: 8px;
+  background-color: var(--bg-base);
   overflow-anchor: none;
   scrollbar-width: none;
 }
@@ -35,7 +88,7 @@
   display: none;
 }
 
-/* 상단 로딩 인디케이터 */
+/* Loading indicator */
 .loading-indicator {
   position: absolute;
   top: 20px;
@@ -47,9 +100,9 @@
   align-items: center;
   width: 40px;
   height: 40px;
-  background-color: white;
+  background-color: var(--bg-card);
   border-radius: 50%;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-sm);
   animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -67,8 +120,8 @@
 .spinner {
   width: 20px;
   height: 20px;
-  border: 2px solid #eee;
-  border-top-color: #adb5bd;
+  border: 2px solid var(--border);
+  border-top-color: var(--brand-primary);
   border-radius: 50%;
   animation: spin 0.8s ease-in-out infinite;
 }
@@ -78,29 +131,29 @@
   }
 }
 
-/* 새로운 메시지 알림 버튼 */
+/* New message alert */
 .new-message-alert {
   position: absolute;
   bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 100;
-  background-color: #ffffff;
-  color: #495057;
-  border: 1px solid #dee2e6;
-  font-size: 0.85rem;
-  padding: 8px 16px;
+  background: var(--brand-gradient);
+  color: white;
+  border: none;
+  font-size: 0.82rem;
+  padding: 9px 18px;
   border-radius: 20px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
   gap: 6px;
-  font-weight: 500;
+  font-weight: 600;
   animation: slideUp 0.3s ease-out;
 }
 .new-message-alert:hover {
-  background-color: #f8f9fa;
+  opacity: 0.92;
 }
 
 @keyframes slideUp {
@@ -114,27 +167,28 @@
   }
 }
 
-/* 날짜 구분선 */
+/* Date separator */
 .date-separator {
   display: flex;
   justify-content: center;
-  margin: 16px 0;
+  margin: 14px 0;
 }
 .date-separator span {
-  background-color: #f1f3f5;
-  color: #868e96;
-  font-size: 0.75rem;
-  padding: 4px 12px;
-  border-radius: 12px;
+  background-color: rgba(0, 0, 0, 0.04);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 14px;
+  border-radius: 20px;
 }
 
-/* 여기까지 읽으셨습니다 마커 */
+/* Unread marker */
 .unread-marker {
   display: flex;
   align-items: center;
-  margin: 20px 0;
-  color: #007bff;
-  font-size: 0.8rem;
+  margin: 18px 0;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
   animation: fadeIn 0.5s ease-in-out;
 }
 @keyframes fadeIn {
@@ -149,25 +203,24 @@
 .unread-marker::after {
   content: "";
   flex: 1;
-  border-bottom: 1px solid rgba(0, 123, 255, 0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 .unread-marker span {
   margin: 0 10px;
-  background-color: rgba(0, 123, 255, 0.1);
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-weight: 500;
+  background: rgba(0, 0, 0, 0.06);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 600;
 }
 
-/* 메시지 버블 공통 */
+/* Message bubbles */
 .message-bubble {
   display: flex;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   max-width: 100%;
   position: relative;
 }
 
-/* 프로필 사진 */
 .profile-column {
   margin-right: 8px;
   display: flex;
@@ -175,52 +228,48 @@
   justify-content: flex-start;
 }
 .profile-picture {
-  width: 36px;
-  height: 36px;
-  border-radius: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
   object-fit: cover;
-  border: 1px solid #eee;
+  border: 1.5px solid var(--border);
 }
 
-/* 메시지 래퍼 */
 .message-content-wrapper {
   display: flex;
   flex-direction: column;
-  max-width: 70%;
+  max-width: 72%;
 }
 
 .sender-username {
-  font-size: 0.8rem;
-  color: #495057;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
   margin-bottom: 4px;
   margin-left: 2px;
+  font-weight: 600;
 }
 
 .message-row {
   display: flex;
   align-items: flex-end;
-  gap: 6px;
+  gap: 5px;
 }
 
 .message-content {
   padding: 10px 14px;
-  border-radius: 16px;
+  border-radius: 18px;
   position: relative;
   word-break: break-all;
   line-height: 1.5;
-  font-size: 0.95rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  transition: transform 0.1s; /* 부드러운 복귀 */
-  /* cursor: pointer 제거 (아래에서 특정 조건에만 부여) */
+  font-size: 0.93rem;
+  transition: transform 0.1s;
 }
 
-/* [수정] 상대방 메시지(봇 제외)만 클릭 가능 및 애니메이션 적용 */
 .other-message .message-content {
   cursor: pointer;
 }
-
 .other-message .message-content:active {
-  transform: scale(0.9);
+  transform: scale(0.92);
 }
 
 .message-text {
@@ -231,30 +280,31 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  min-width: 40px;
+  min-width: 38px;
 }
 
 .message-time {
-  font-size: 0.7rem;
-  color: #adb5bd;
+  font-size: 0.68rem;
+  color: var(--text-muted);
   white-space: nowrap;
 }
 
 .unread-count {
-  font-size: 0.7rem;
-  color: #adb5bd;
-  font-weight: bold;
+  font-size: 0.68rem;
+  color: var(--brand-primary);
+  font-weight: 700;
   margin-bottom: 2px;
 }
 
-/* 내 메시지 스타일 */
+/* My messages */
 .my-message {
   justify-content: flex-end;
 }
 .my-message .message-content {
-  background-color: #007bff;
+  background: var(--brand-gradient);
   color: #ffffff;
-  border-bottom-right-radius: 4px;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 .my-message .message-content-wrapper {
   align-items: flex-end;
@@ -267,14 +317,16 @@
   text-align: right;
 }
 
-/* 상대방 메시지 스타일 */
+/* Other messages */
 .other-message {
   justify-content: flex-start;
 }
 .other-message .message-content {
-  background-color: #f1f3f5;
-  color: #212529;
-  border-bottom-left-radius: 4px;
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border-bottom-left-radius: 5px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
 }
 .other-message .message-content-wrapper {
   align-items: flex-start;
@@ -285,77 +337,82 @@
   flex-direction: column;
 }
 
-/* 봇 메시지 */
+/* Bot messages */
 .bot-message {
   justify-content: center;
-  margin: 12px 0;
+  margin: 10px 0;
 }
 .bot-message .message-content {
-  background-color: #f8f9fa;
-  color: #868e96;
+  background-color: rgba(0, 0, 0, 0.04);
+  color: var(--text-secondary);
   text-align: center;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   padding: 6px 16px;
   border-radius: 20px;
   max-width: 90%;
   box-shadow: none;
+  border: none;
   cursor: default;
+  white-space: nowrap;
 }
 .bot-message .message-content-wrapper {
   align-items: center;
 }
 
-/* 입력창 영역 */
+/* Input area */
 .message-input-container {
   display: flex;
-  padding: 12px 16px;
-  background-color: #ffffff;
-  border-top: 1px solid #f1f3f5;
+  padding: 12px 14px;
+  background-color: var(--bg-card);
+  border-top: 1px solid var(--border);
   align-items: center;
   flex-shrink: 0;
+  gap: 10px;
 }
 
 .message-input-container input {
   flex-grow: 1;
-  border: 1px solid #e9ecef;
-  background-color: #f8f9fa;
+  border: 1.5px solid var(--border);
+  background-color: var(--bg-base);
   border-radius: 24px;
-  padding: 12px 16px;
-  margin-right: 10px;
+  padding: 12px 18px;
   outline: none;
-  font-size: 0.95rem;
-  transition: border-color 0.2s;
+  font-size: 0.93rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  color: var(--text-primary);
 }
 .message-input-container input:focus {
-  border-color: #007bff;
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
 }
 
 .message-input-container button.send-button {
   width: 44px;
   height: 44px;
   border: none;
-  background-color: #007bff;
+  background: var(--brand-gradient);
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s, transform 0.1s;
+  transition: opacity 0.2s, transform 0.1s;
   flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
-
 .message-input-container button.send-button:hover {
-  background-color: #0069d9;
+  opacity: 0.9;
 }
 .message-input-container button.send-button:active {
-  transform: scale(0.95);
+  transform: scale(0.93);
 }
 
+/* Report button */
 .report-button {
   background: none;
   border: none;
   cursor: pointer;
-  color: #ff6b6b;
+  color: #ef4444;
   padding: 0;
   border-radius: 50%;
   transition: background-color 0.2s;
@@ -387,7 +444,7 @@
   min-height: 14px;
 }
 
-/* Floating Menu Button */
+/* Floating menu */
 .menu-container {
   position: absolute;
   top: 30px;
@@ -395,40 +452,60 @@
   z-index: 50;
 }
 
-.menu-button {
-  width: 48px;
-  height: 48px;
-  background-color: #ffffff;
-  color: #000000;
+.taxi-call-btn {
+  width: 40px;
+  height: 40px;
+  background: #f5d800;
+  color: #3a3000;
   border: none;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, transform 0.1s;
+  box-shadow: 0 2px 6px rgba(254, 229, 0, 0.5);
+}
+
+.taxi-call-btn:hover {
+  background: #eecf00;
+}
+.taxi-call-btn:active {
+  transform: scale(0.93);
+}
+
+.menu-button {
+  width: 44px;
+  height: 44px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1.5px solid var(--border);
   border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-md);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   transition: background-color 0.2s, transform 0.1s;
 }
-
 .menu-button:hover {
-  background-color: #f8f9fa;
+  background-color: var(--bg-base);
 }
-
 .menu-button:active {
-  transform: scale(0.95);
+  transform: scale(0.93);
 }
 
-/* 메뉴 드롭다운 */
 .menu-dropdown {
   position: absolute;
   top: 100%;
   right: 0;
   margin-top: 8px;
-  background-color: #ffffff;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
   min-width: 160px;
@@ -439,31 +516,32 @@
 .menu-dropdown button {
   background: none;
   border: none;
-  padding: 12px 16px;
+  padding: 13px 16px;
   text-align: left;
   cursor: pointer;
-  font-size: 0.95rem;
-  color: #212529;
+  font-size: 0.9rem;
+  color: var(--text-primary);
   white-space: nowrap;
-  border-bottom: 1px solid #f1f3f5;
+  border-bottom: 1px solid var(--border);
+  font-weight: 500;
+  transition: background-color 0.15s;
 }
-
 .menu-dropdown button:last-child {
   border-bottom: none;
 }
-
 .menu-dropdown button:hover {
-  background-color: #f8f9fa;
+  background-color: var(--bg-base);
 }
 
-/* Modal Styles */
+/* Modals */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(30, 27, 75, 0.45);
+  backdrop-filter: blur(3px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -471,22 +549,22 @@
 }
 
 .modal-content {
-  background-color: #ffffff;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  background-color: var(--bg-card);
+  padding: 28px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
   max-width: 90%;
   width: 320px;
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  animation: popInModal 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  gap: 14px;
+  animation: popInModal 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @keyframes popInModal {
   from {
-    transform: scale(0.9);
+    transform: scale(0.88);
     opacity: 0;
   }
   to {
@@ -497,54 +575,59 @@
 
 .modal-content h3 {
   margin: 0;
-  font-size: 1.2rem;
-  color: #333;
+  font-size: 1.15rem;
+  color: var(--text-primary);
+  font-weight: 800;
 }
 
 .modal-content p {
   margin: 0;
-  font-size: 0.95rem;
-  color: #555;
-  line-height: 1.5;
+  font-size: 0.93rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
 }
 
-/* Modal Buttons */
 .modal-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 .action-button {
   flex: 1;
-  padding: 10px;
-  border-radius: 8px;
+  padding: 11px;
+  border-radius: var(--radius-sm);
   border: none;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  font-size: 0.95rem;
-  transition: opacity 0.2s;
+  font-size: 0.9rem;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.action-button:active {
+  transform: scale(0.96);
 }
 
 .action-button.primary {
-  background-color: #007bff;
+  background: var(--brand-gradient);
   color: white;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
 }
 .action-button.danger {
-  background-color: #ff6b6b;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
   color: white;
+  box-shadow: 0 3px 10px rgba(239, 68, 68, 0.3);
 }
 .action-button.secondary {
-  background-color: #e9ecef;
-  color: #495057;
+  background: var(--bg-base);
+  color: var(--text-secondary);
+  border: 1.5px solid var(--border);
 }
-
 .action-button:hover {
-  opacity: 0.9;
+  opacity: 0.88;
 }
 
-/* 카카오택시 버튼 스타일 */
+/* Kakao button */
 .kakao-link-button {
   display: inline-flex;
   align-items: center;
@@ -552,25 +635,24 @@
   background-color: #fee500;
   color: #191919;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
   border: none;
   cursor: pointer;
   transition: background-color 0.2s;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(254, 229, 0, 0.4);
 }
-
 .kakao-link-button:hover {
   background-color: #fdd835;
 }
 
-/* 참가자 목록 (강퇴 팝업) */
+/* Participant list */
 .participant-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   max-height: 200px;
   overflow-y: auto;
   text-align: left;
@@ -580,10 +662,11 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 10px;
-  border-radius: 8px;
-  background-color: #f8f9fa;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-base);
   overflow: hidden;
+  border: 1px solid var(--border);
 }
 
 .participant-profile-pic {
@@ -600,54 +683,68 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 0.9rem;
-  color: #333;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  font-weight: 500;
 }
 
 .kick-button {
-  background-color: #dc3545;
-  color: #ffffff;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
   border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
   cursor: pointer;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
+  font-weight: 700;
   flex-shrink: 0;
   white-space: nowrap;
 }
 
 .close-button {
-  background-color: #007bff;
-  color: #ffffff;
+  background: var(--brand-gradient);
+  color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
+  padding: 11px 20px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  font-weight: 700;
   width: 100%;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
 }
 
-/* 신고하기 모달 스타일 */
+/* Report modal */
 .report-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin: 10px 0 20px 0;
+  gap: 10px;
+  margin: 8px 0 16px;
   text-align: left;
 }
 
 .report-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.95rem;
+  gap: 10px;
+  font-size: 0.92rem;
   cursor: pointer;
-  color: #333;
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--bg-base);
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.report-item:hover {
+  border-color: #9ca3af;
+  background: #f3f4f6;
 }
 
 .report-item input[type="radio"] {
-  accent-color: #ff6b6b;
-  width: 18px;
-  height: 18px;
+  accent-color: var(--brand-primary);
+  width: 16px;
+  height: 16px;
   cursor: pointer;
 }
