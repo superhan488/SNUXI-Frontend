@@ -89,3 +89,55 @@ export const suspendUser = async (
   );
   return response.data;
 };
+
+// ================= /admin/users =================
+export interface AdminUser {
+  id: number;
+  email: string;
+  username: string;
+  role: string;
+  createdAt?: string;
+  isSuspended?: boolean;
+}
+
+interface AdminUsersResponse {
+  content: AdminUser[];
+  page: PageInfo;
+}
+
+export const getAdminUsers = async (
+  page = 0,
+  size = 20
+): Promise<AdminUsersResponse> => {
+  const response = await apiClient.get<AdminUsersResponse>('/admin/users', {
+    params: { page, size },
+  });
+  return response.data;
+};
+
+// ================= /admin/rooms =================
+export interface AdminRoom {
+  id: number;
+  departureId: number;
+  destinationId: number;
+  departureTime: string;
+  status: string;
+  currentCount: number;
+  maxCapacity: number;
+  minCapacity: number;
+}
+
+interface AdminRoomsResponse {
+  content: AdminRoom[];
+  page: PageInfo;
+}
+
+export const getAdminRooms = async (
+  page = 0,
+  size = 10
+): Promise<AdminRoomsResponse> => {
+  const response = await apiClient.get<AdminRoomsResponse>('/admin/rooms', {
+    params: { page, size },
+  });
+  return response.data;
+};

@@ -332,6 +332,15 @@ const RoomSearch = () => {
         )}
       </div>
 
+      <a
+        href="https://docs.google.com/forms/d/e/1FAIpQLSfnyjJIILns6MYXnA1PtIdVFIyGqmp_G5NGYiI1w_bMTPKsvg/viewform"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inquiry-fab"
+      >
+        문의/신고하기
+      </a>
+
       {(showLoginModal || showJoinModal) && (
         <div style={modalOverlayStyle}>
           <div style={modalContentStyle}>

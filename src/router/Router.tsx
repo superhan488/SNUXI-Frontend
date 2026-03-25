@@ -2,6 +2,7 @@ import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import BottomNav from '../components/BottomNav';
 import NavBar from '../components/NavBar';
 import AdminPage from '../pages/AdminPage';
+import AdminChatView from '../pages/AdminPage/AdminChatView';
 import ReportDetail from '../pages/AdminPage/ReportDetail';
 import ChatRoom from '../pages/ChatRoom';
 import CreateRoom from '../pages/CreateRoom';
@@ -39,6 +40,7 @@ const Router = () => {
           <Route path="/my-page" element={<MyPage />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/admin/reports/:reportId" element={<ReportDetail />} />
+          <Route path="/admin/chat/:roomId" element={<AdminChatView />} />
           <Route path="/" element={<RoomSearch />} />
         </Route>
       </Routes>

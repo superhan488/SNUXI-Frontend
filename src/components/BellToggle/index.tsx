@@ -12,8 +12,19 @@ interface BellToggleProps {
 const BellToggle = ({ className }: BellToggleProps) => {
   const [enabled, setEnabled] = useState(isNotificationsEnabled);
 
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isStandalone =
+    'standalone' in navigator &&
+    (navigator as { standalone?: boolean }).standalone === true;
+
   const handleToggle = async () => {
     if (!enabled) {
+      if (isIOS && !isStandalone) {
+        alert(
+          '📲 iPhone에서 알림을 받으려면:\n\n1. Safari 하단 공유 버튼(□↑) 탭\n2. "홈 화면에 추가" 선택\n3. 홈 화면의 SNUXI 앱으로 실행\n\n이후 알림을 켤 수 있어요!'
+        );
+        return;
+      }
       const granted = await requestNotificationPermission();
       if (!granted) {
         alert('알림 권한이 거부되었습니다. 브라우저 설정에서 허용해주세요.');
