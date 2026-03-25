@@ -1,31 +1,28 @@
 /* navBar.css */
 
 .nav-wrapper {
-  height: 64px; /* 높이를 조금 늘려 시원하게 변경 */
+  height: 64px;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 1000;
-  background-color: rgba(255, 255, 255, 0.95); /* 살짝 투명하게 */
-  backdrop-filter: blur(10px); /* 블러 효과로 현대적인 느낌 */
-  border-bottom: 1px solid #eaeaea;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
 
 .navBar {
   display: grid;
-  /* 좌측(로고), 중앙(메뉴), 우측(로그인/관리자) 3분할 */
-  /* 1fr auto 1fr 구조는 중앙 요소가 항상 화면 정중앙에 오도록 보장함 */
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   height: 100%;
-  max-width: 1200px; /* 컨텐츠 최대 너비 제한으로 안정감 */
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
 }
 
-/* --- 좌측: 로고 --- */
+/* Logo */
 .logo {
   display: flex;
   align-items: center;
@@ -37,95 +34,216 @@
 }
 
 .logo img {
-  height: 28px; /* 로고 크기 조정 */
+  height: 28px;
   object-fit: contain;
 }
 
-/* --- 중앙: 메인 네비게이션 --- */
+/* Center nav */
 .nav-center {
   display: flex;
-  gap: 40px; /* 메뉴 간격 넓게 */
+  gap: 4px;
   justify-content: center;
 }
 
 .nav-item {
   position: relative;
   text-decoration: none;
-  color: #555;
-  font-size: 16px;
+  color: var(--text-secondary);
+  font-size: 14px;
   font-weight: 500;
-  padding: 8px 0;
-  transition: color 0.2s ease;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: color 0.15s ease, background-color 0.15s ease;
 }
 
 .nav-item:hover {
-  color: #000;
+  color: var(--text-primary);
+  background-color: var(--bg-base);
 }
 
-/* 활성화 상태 (파란색 + 밑줄) */
 .nav-item.active {
-  color: #007bff;
+  color: var(--text-primary);
   font-weight: 600;
+  background-color: var(--bg-base);
 }
 
-/* 활성화 시 하단 밑줄 애니메이션 효과 */
 .nav-item::after {
   content: "";
   position: absolute;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
+  left: 14px;
+  right: 14px;
   height: 2px;
-  background-color: #007bff;
-  transition: width 0.3s ease;
+  background-color: var(--text-primary);
+  transform: scaleX(0);
+  transition: transform 0.2s ease;
   border-radius: 2px;
 }
 
 .nav-item.active::after {
-  width: 100%;
+  transform: scaleX(1);
 }
 
-/* --- 우측: 로그인/로그아웃/관리자 --- */
+/* Right section */
 .nav-right {
   display: flex;
-  justify-content: flex-end; /* 오른쪽 정렬 */
+  justify-content: flex-end;
   align-items: center;
-  gap: 20px;
+  gap: 8px;
+  margin-right: -12px;
 }
 
-/* 관리자 버튼 스타일 */
 .admin-link {
   text-decoration: none;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-  color: #ff4d4f; /* 관리자는 눈에 띄게 붉은 계열 추천 (혹은 #333) */
-  background-color: #fff1f0;
-  padding: 6px 12px;
-  border-radius: 20px;
-  transition: all 0.2s;
+  color: #b91c1c;
+  background-color: #fef2f2;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid #fecaca;
+  transition: all 0.15s;
 }
 
 .admin-link:hover {
-  background-color: #ffccc7;
+  background-color: #fee2e2;
 }
 
-/* 로그인 버튼 스타일 */
-.login-button {
-  background: none;
-  border: 1px solid #ddd;
-  padding: 8px 16px;
-  border-radius: 6px;
+/* Mypage text link */
+.mypage-icon-link {
+  position: relative;
+  text-decoration: none;
+  color: var(--text-secondary);
   font-size: 14px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.mypage-icon-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 14px;
+  right: 14px;
+  height: 2px;
+  background-color: var(--text-primary);
+  transform: scaleX(0);
+  transition: transform 0.2s ease;
+  border-radius: 2px;
+}
+
+.mypage-icon-link:hover {
+  color: var(--text-primary);
+  background-color: var(--bg-base);
+}
+
+.mypage-icon-link.active {
+  color: var(--text-primary);
   font-weight: 600;
-  color: #333;
+  background-color: var(--bg-base);
+}
+
+.mypage-icon-link.active::after {
+  transform: scaleX(1);
+}
+
+/* Login button */
+.login-button {
+  background: var(--text-primary);
+  border: none;
+  padding: 7px 18px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .login-button:hover {
-  /* [수정] 호버 시 '출발확정' 배경색(#e7f5ff) 및 텍스트 색상(#1c7ed6) 적용 */
-  background-color: #e7f5ff;
-  border-color: #e7f5ff; /* 테두리도 배경색과 맞춤 */
-  color: #007bff;
+  background: var(--brand-secondary);
+}
+
+/* Hamburger button — hidden on desktop */
+.hamburger-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-primary);
+  padding: 6px;
+  border-radius: 6px;
+  margin-left: auto;
+}
+
+/* Mobile menu dropdown */
+.mobile-menu {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 16px 16px;
+  gap: 2px;
+}
+
+.mobile-menu-item {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 500;
+  padding: 12px 16px;
+  border-radius: 8px;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.mobile-menu-item:hover {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+}
+
+.mobile-menu-item.active {
+  color: var(--text-primary);
+  font-weight: 600;
+  background-color: var(--bg-base);
+}
+
+.mobile-menu-item.admin {
+  color: #b91c1c;
+}
+
+.mobile-menu-divider {
+  height: 1px;
+  background-color: var(--border);
+  margin: 8px 0;
+}
+
+.mobile-login-btn {
+  background: var(--text-primary);
+  border: none;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  text-align: left;
+  transition: opacity 0.15s;
+}
+
+.mobile-login-btn:hover {
+  opacity: 0.85;
+}
+
+.nav-wrapper {
+  display: none;
 }

@@ -1,3 +1,42 @@
+:root {
+  --brand-primary: #2563eb;
+  --brand-secondary: #1d4ed8;
+  --brand-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  --accent: #f97316;
+  --bg-base: #f9fafb;
+  --bg-card: #ffffff;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --border: #e5e7eb;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.1);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+
+  /* Status colors */
+  --status-recruiting-bg: #ecfdf5;
+  --status-recruiting-text: #059669;
+  --status-success-bg: #f0f9ff;
+  --status-success-text: #0369a1;
+  --status-closed-bg: #f3f4f6;
+  --status-closed-text: #6b7280;
+  --status-locked-bg: #fffbeb;
+  --status-locked-text: #d97706;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-  padding-top: 40px;
+  padding-top: 0;
+  padding-bottom: 60px;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR",
+    sans-serif;
+  margin: 0;
 }

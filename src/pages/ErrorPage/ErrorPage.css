@@ -1,55 +1,75 @@
+/* ErrorPage */
 .error-page-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #f8f9fa; /* Light gray background */
-  color: #343a40; /* Dark text */
-  font-family: Arial, sans-serif;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
   text-align: center;
   padding: 20px;
 }
 
 .error-content {
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  padding: 40px;
-  max-width: 500px;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1.5px solid var(--border);
+  padding: 44px 36px;
+  max-width: 440px;
   width: 100%;
 }
 
 .error-content h1 {
-  color: #dc3545; /* Red for error */
-  font-size: 2.5rem;
-  margin-bottom: 20px;
+  color: #ef4444;
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  letter-spacing: -0.04em;
 }
 
 .error-message {
-  font-size: 1.1rem;
-  margin-bottom: 15px;
-  color: #6c757d;
+  font-size: 1.05rem;
+  margin-bottom: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 
 .error-content p {
-  font-size: 1rem;
-  margin-bottom: 30px;
-  line-height: 1.5;
+  font-size: 0.95rem;
+  margin-bottom: 28px;
+  line-height: 1.6;
+  color: var(--text-secondary);
 }
 
 .home-button {
-  background-color: #007bff;
+  display: block;
+  width: 100%;
+  background: var(--brand-gradient);
   color: #ffffff;
   border: none;
-  padding: 12px 25px;
-  border-radius: 5px;
+  padding: 13px 30px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 1rem;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
+  font-size: 0.95rem;
+  font-weight: 700;
+  transition: opacity 0.2s, transform 0.1s;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  margin-bottom: 10px;
 }
 
 .home-button:hover {
-  background-color: #0056b3;
+  opacity: 0.9;
+}
+
+.home-button:active {
+  transform: scale(0.97);
+}
+
+.home-button.secondary {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1.5px solid var(--border);
+  box-shadow: none;
 }
