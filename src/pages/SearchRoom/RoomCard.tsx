@@ -1,6 +1,7 @@
 import React from 'react';
-import './RoomCard.css';
+import { useNavigate } from 'react-router-dom';
 import { type RoomData } from '../../types';
+import './RoomCard.css';
 
 interface RoomCardProps {
   room: RoomData;
@@ -21,6 +22,7 @@ const maskHostName = (name: string) => {
 };
 
 const RoomCard: React.FC<RoomCardProps> = ({ room, onClick, isMyPot }) => {
+  const navigate = useNavigate();
   const now = new Date();
   const departure = new Date(room.departureTime);
   const diffMin = (departure.getTime() - now.getTime()) / 60000;
@@ -57,7 +59,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onClick, isMyPot }) => {
   return (
     <div
       className={`room-card${isMyPot ? ' my-pot' : ''}`}
-      onClick={() => !isMyPot && onClick(room.roomId)}
+      onClick={() => isMyPot ? navigate('/my-chat') : onClick(room.roomId)}
     >
       {/* 경로 */}
       <div className="rc-route">
