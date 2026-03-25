@@ -21,6 +21,19 @@ jobs:
           yarn install
           yarn build
 
+      - name: Debug AWS identity/resources
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ap-southeast-2
+        run: |
+          set -euxo pipefail
+          aws --version
+          aws sts get-caller-identity
+          aws s3api head-bucket --bucket snuxi-prod
+          aws cloudfront get-distribution --id E1J4DN1QLF4FOT > /tmp/cf.json
+          echo "CloudFront distribution check ok"
+
       - name: Deploy to S3 (Prod)
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
@@ -28,4 +41,4 @@ jobs:
           AWS_REGION: ap-southeast-2
         run: |
           aws s3 sync ./dist s3://snuxi-prod --delete
-          aws cloudfront create-invalidation --distribution-id E1J4DN1QLF4FOT --paths "/*"\
+          aws cloudfront create-invalidation --distribution-id E1J4DN1QLF4FOT --paths "/*"
