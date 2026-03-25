@@ -1,7 +1,7 @@
 import { isAxiosError } from 'axios';
 import { useAtomValue } from 'jotai';
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getLandmarks } from '../../api/map';
 import type { Participant, Pot } from '../../api/room';
 import {
@@ -14,6 +14,7 @@ import {
   updateRoomStatus,
 } from '../../api/room';
 import { userIdAtom } from '../../common/user';
+import BellToggle from '../../components/BellToggle';
 import './MyChat.css';
 
 const MyChat = () => {
@@ -58,7 +59,7 @@ const MyChat = () => {
   const fetchPots = useCallback(async () => {
     try {
       const fetched = await getUserPots();
-      setPots(fetched);
+      setPots([...fetched].sort((a, b) => new Date(a.departureTime).getTime() - new Date(b.departureTime).getTime()));
       const map: Record<number, Participant[]> = {};
       await Promise.all(
         fetched.map(async (pot) => {
@@ -202,21 +203,10 @@ const MyChat = () => {
   return (
     <div className="my-chat-container">
       <div className="mobile-app-bar">
-        <span className="app-bar-logo">SNUXI</span>
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="app-bar-bell"
-        >
-          <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
-          <path d="M13.73 21a2 2 0 01-3.46 0" />
-        </svg>
+        <Link to="/" className="app-bar-logo">
+          SNUXI
+        </Link>
+        <BellToggle className="app-bar-bell" />
       </div>
       <div className="chat-page-content">
         {pots.length === 0 ? (

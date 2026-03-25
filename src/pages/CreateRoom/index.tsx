@@ -1,10 +1,11 @@
 import { isAxiosError } from 'axios';
 import { useAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getLandmarks } from '../../api/map';
 import { createRoom, getUserPots } from '../../api/room';
 import { isLoggedInAtom } from '../../common/user';
+import BellToggle from '../../components/BellToggle';
 import {
   isNotificationsEnabled,
   requestNotificationPermission,
@@ -28,7 +29,7 @@ const CreateRoom = () => {
   const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
   const [departureTime, setDepartureTime] = useState(() => {
-    const now = new Date();
+    const now = new Date(Date.now() + 60000);
     return new Date(now.getTime() - now.getTimezoneOffset() * 60000)
       .toISOString()
       .slice(0, 16);
@@ -84,10 +85,6 @@ const CreateRoom = () => {
       alert('출발지와 도착지를 다르게 입력해주세요.');
       return;
     }
-    if (new Date(departureTime).getTime() < Date.now() - 30000) {
-      alert('출발 시간은 현재 시간 이후여야 합니다.');
-      return;
-    }
     try {
       const pots = await getUserPots();
       if (pots.length >= 3) {
@@ -100,7 +97,9 @@ const CreateRoom = () => {
 
     const departureId = parseInt(start, 10);
     const destinationId = parseInt(end, 10);
-    const departureTimeISO = new Date(departureTime).toISOString();
+    // UTC 변환 없이 사용자가 선택한 한국 시간 그대로 전송
+    const departureTimeISO = `${departureTime}:00`;
+
 
     const roomDetails = {
       departureId,
@@ -127,10 +126,16 @@ const CreateRoom = () => {
       if (isAxiosError(error) && error.response?.data) {
         // biome-ignore lint/suspicious/noExplicitAny: 서버 에러 구조 대응
         const data = error.response.data as any;
-        const errMsg: string = data.errMsg || data.message || '';
+        console.error('방 개설 에러 응답:', JSON.stringify(data));
+        const errMsg: string = data.errMsg || data.message || data.error || '';
         // 딥링크 오류는 방 생성 자체는 성공 — 소프트 경고 후 이동
         if (errMsg.includes('딥링크')) {
           navigate('/search-room');
+          return;
+        }
+        // 시간 관련 오류는 사용자에게 노출하지 않음 (effectiveTime으로 이미 보정)
+        if (errMsg.includes('이후') || errMsg.includes('시간') || errMsg.includes('time')) {
+          alert('방 개설 중 오류가 발생했습니다. 다시 시도해주세요.');
           return;
         }
         alert(errMsg || '방 개설 중 오류가 발생했습니다.');
@@ -184,21 +189,10 @@ const CreateRoom = () => {
   return (
     <div className="create-container">
       <div className="create-app-bar">
-        <span className="create-app-bar-logo">SNUXI</span>
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="create-app-bar-bell"
-        >
-          <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
-          <path d="M13.73 21a2 2 0 01-3.46 0" />
-        </svg>
+        <Link to="/" className="create-app-bar-logo">
+          SNUXI
+        </Link>
+        <BellToggle className="create-app-bar-bell" />
       </div>
       <h1 className="create-title">택시팟 만들기</h1>
 

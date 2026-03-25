@@ -34,10 +34,17 @@
   font-weight: 700;
   color: var(--brand-primary);
   letter-spacing: -0.02em;
+  text-decoration: none;
 }
 
 .app-bar-bell {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
   color: var(--text-secondary);
+  display: flex;
+  align-items: center;
 }
 
 /* Content area */
@@ -75,10 +82,10 @@
 .current-pot-card {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 11px;
   background: var(--bg-card);
   border-radius: var(--radius-lg);
-  padding: 20px 18px 0;
+  padding: 16px 17px 0;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border: 1.5px solid var(--border);
   color: inherit;
@@ -107,7 +114,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 1.05rem;
+  font-size: 1.01rem;
   font-weight: 700;
   color: var(--text-primary);
   flex: 1;
@@ -197,6 +204,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin: 0;
 }
 
 .participants-label {
@@ -211,6 +219,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-top: 6px;
 }
 
 .participant-row-item {
@@ -220,8 +229,8 @@
 }
 
 .participant-avatar {
-  width: 34px;
-  height: 34px;
+  width: 31px;
+  height: 31px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
@@ -378,7 +387,7 @@
   justify-content: center;
   gap: 8px;
   width: 100%;
-  padding: 12px;
+  padding: 10px;
   background: var(--brand-gradient);
   color: #ffffff;
   border: none;
@@ -405,7 +414,7 @@
   justify-content: center;
   gap: 8px;
   width: 100%;
-  padding: 12px;
+  padding: 10px;
   background: #f5d800;
   color: #3a3000;
   border: none;

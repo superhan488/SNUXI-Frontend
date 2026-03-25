@@ -1,7 +1,7 @@
 import { isAxiosError } from 'axios';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { withdrawUser } from '../../api/auth';
 import { BACKEND_URL } from '../../api/constants';
 import { updateProfilePicture, updateUsername } from '../../api/user';
@@ -110,21 +110,48 @@ const MyPage = () => {
     return (
       <div className="mp-container">
         <div className="mp-app-bar">
-          <span className="mp-app-bar-logo">SNUXI</span>
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          <Link to="/" className="mp-app-bar-logo">
+            SNUXI
+          </Link>
+          <button
+            type="button"
             className="mp-app-bar-bell"
+            onClick={handleToggleNotifications}
+            aria-label={notificationsEnabled ? '알림 끄기' : '알림 켜기'}
           >
-            <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
-            <path d="M13.73 21a2 2 0 01-3.46 0" />
-          </svg>
+            {notificationsEnabled ? (
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.73 21a2 2 0 01-3.46 0" />
+              </svg>
+            ) : (
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M13.73 21a2 2 0 01-3.46 0" />
+                <path d="M18.63 13A17.89 17.89 0 0118 8" />
+                <path d="M6.26 6.26A5.86 5.86 0 006 8c0 7-3 9-3 9h14" />
+                <path d="M18 8a6 6 0 00-9.33-5" />
+                <line x1="3" y1="3" x2="21" y2="21" />
+              </svg>
+            )}
+          </button>
         </div>
         <div className="mp-not-logged-in">
           <div className="mp-not-logged-icon">
@@ -154,21 +181,48 @@ const MyPage = () => {
   return (
     <div className="mp-container">
       <div className="mp-app-bar">
-        <span className="mp-app-bar-logo">SNUXI</span>
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+        <Link to="/" className="mp-app-bar-logo">
+          SNUXI
+        </Link>
+        <button
+          type="button"
           className="mp-app-bar-bell"
+          onClick={handleToggleNotifications}
+          aria-label={notificationsEnabled ? '알림 끄기' : '알림 켜기'}
         >
-          <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
-          <path d="M13.73 21a2 2 0 01-3.46 0" />
-        </svg>
+          {notificationsEnabled ? (
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 01-3.46 0" />
+            </svg>
+          ) : (
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M13.73 21a2 2 0 01-3.46 0" />
+              <path d="M18.63 13A17.89 17.89 0 0118 8" />
+              <path d="M6.26 6.26A5.86 5.86 0 006 8c0 7-3 9-3 9h14" />
+              <path d="M18 8a6 6 0 00-9.33-5" />
+              <line x1="3" y1="3" x2="21" y2="21" />
+            </svg>
+          )}
+        </button>
       </div>
       <h1 className="mp-title">마이페이지</h1>
 
@@ -299,6 +353,46 @@ const MyPage = () => {
         </div>
 
         <div className="mp-divider" />
+
+        {/* 관리자 페이지 — superhan488@snu.ac.kr 전용 */}
+        {(email === 'superhan488@snu.ac.kr' || email === 'yujatea97@snu.ac.kr') && (
+          <>
+            <button
+              className="mp-list-item mp-list-btn"
+              onClick={() => navigate('/admin')}
+            >
+              <div className="mp-list-left">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="mp-list-icon"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+                <span className="mp-list-text">관리자 페이지</span>
+              </div>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </button>
+            <div className="mp-divider" />
+          </>
+        )}
 
         {/* 이용약관 */}
         <button
