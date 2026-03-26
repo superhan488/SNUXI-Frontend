@@ -83,8 +83,8 @@ export function openInExternalBrowser(
       return 'redirected';
 
     case 'android-other':
-      // Android Intent URI → Chrome 우선, fallback으로 기본 브라우저
-      window.location.href = `intent://${url.replace(/^https?:\/\//i, '')}#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=${encodeURIComponent(url)};end`;
+      // Android Intent URI → 기본 브라우저로 열기
+      window.location.href = `intent://${url.replace(/^https?:\/\//i, '')}#Intent;scheme=https;S.browser_fallback_url=${encodeURIComponent(url)};end`;
       return 'redirected';
 
     case 'ios-other':
