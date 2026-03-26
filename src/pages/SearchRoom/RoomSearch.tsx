@@ -9,6 +9,10 @@ import { getUserPots } from '../../api/room';
 import { isLoggedInAtom } from '../../common/user';
 import BellToggle from '../../components/BellToggle';
 import { type RoomData } from '../../types';
+import {
+  copyUrlAndOpenSafari,
+  openInExternalBrowser,
+} from '../../utils/inAppBrowser';
 import RoomCard from './RoomCard';
 import './RoomSearch.css';
 
@@ -56,6 +60,8 @@ const RoomSearch = () => {
   const [selectedRoomId, setSelectedRoomId] = useState<number | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
+  const [showInAppGuide, setShowInAppGuide] = useState(false);
+  const [inAppGuideUrl, setInAppGuideUrl] = useState('');
 
   // --- Refs ---
   const loadingRef = useRef(false);
@@ -205,6 +211,14 @@ const RoomSearch = () => {
     const frontendRedirectUri = window.location.origin;
     const encodedUri = encodeURIComponent(frontendRedirectUri);
     const googleLoginUrl = `${BACKEND_URL}/login?redirect_uri=${encodedUri}`;
+
+    const result = openInExternalBrowser(googleLoginUrl);
+    if (result === 'redirected') return;
+    if (result === 'ios-fallback') {
+      setInAppGuideUrl(googleLoginUrl);
+      setShowInAppGuide(true);
+      return;
+    }
     window.location.href = googleLoginUrl;
   };
 
@@ -230,6 +244,7 @@ const RoomSearch = () => {
   const closeModals = () => {
     setShowLoginModal(false);
     setShowJoinModal(false);
+    setShowInAppGuide(false);
     setSelectedRoomId(null);
   };
 
@@ -386,6 +401,34 @@ const RoomSearch = () => {
                 </div>
               </>
             )}
+          </div>
+        </div>
+      )}
+
+      {showInAppGuide && (
+        <div style={modalOverlayStyle}>
+          <div style={modalContentStyle}>
+            <p style={{ fontWeight: 600, marginBottom: '8px' }}>
+              외부 브라우저에서 열어주세요
+            </p>
+            <p style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.5 }}>
+              인앱 브라우저에서는 Google 로그인이
+              <br />
+              지원되지 않습니다.
+              <br />
+              아래 버튼을 눌러 Safari에서 열어주세요.
+            </p>
+            <div style={buttonGroupStyle}>
+              <button onClick={closeModals} style={cancelButtonStyle}>
+                닫기
+              </button>
+              <button
+                onClick={() => copyUrlAndOpenSafari(inAppGuideUrl)}
+                style={confirmButtonStyle}
+              >
+                URL 복사 + Safari 열기
+              </button>
+            </div>
           </div>
         </div>
       )}
