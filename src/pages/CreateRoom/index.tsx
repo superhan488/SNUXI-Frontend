@@ -106,7 +106,6 @@ const CreateRoom = () => {
       departureTime: departureTimeISO,
       minCapacity,
       maxCapacity: 4,
-      estimatedFee: 5000,
     };
 
     try {
@@ -321,6 +320,16 @@ const CreateRoom = () => {
             className={`cr-toggle ${notifyEnabled ? 'on' : 'off'}`}
             onClick={async () => {
               if (!notifyEnabled) {
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                const isStandalone =
+                  'standalone' in navigator &&
+                  (navigator as { standalone?: boolean }).standalone === true;
+                if (isIOS && !isStandalone) {
+                  alert(
+                    'iPhone에서 알림을 받으려면:\n\n1. Safari 하단 공유 버튼 탭\n2. "홈 화면에 추가" 선택\n3. 홈 화면의 SNUXI 앱으로 실행\n\n이후 알림을 켤 수 있어요!'
+                  );
+                  return;
+                }
                 if (notifyPermission === 'denied') {
                   alert(
                     '알림이 차단되어 있습니다.\n주소창 왼쪽 🔒 아이콘 → 알림 → 허용 후 새로고침해주세요.'

@@ -11,6 +11,7 @@ import {
   nicknameAtom,
   profileImageAtom,
 } from '../../common/user';
+import { openInExternalBrowser } from '../../utils/inAppBrowser';
 import {
   getNotificationPermission,
   isNotificationSupported,
@@ -41,7 +42,17 @@ const MyPage = () => {
 
   const handleLogin = () => {
     const uri = encodeURIComponent(window.location.origin);
-    window.location.href = `${BACKEND_URL}/login?redirect_uri=${uri}`;
+    const loginUrl = `${BACKEND_URL}/login?redirect_uri=${uri}`;
+
+    const result = openInExternalBrowser(loginUrl);
+    if (result === 'redirected') return;
+    if (result === 'ios-fallback') {
+      alert(
+        '인앱 브라우저에서는 Google 로그인이 지원되지 않습니다.\n\n하단 메뉴(⋯)에서 "Safari로 열기"를 선택해주세요.'
+      );
+      return;
+    }
+    window.location.href = loginUrl;
   };
 
   const handleLogout = () => {

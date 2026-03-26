@@ -1,9 +1,10 @@
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { submitTermsAgreement } from '../../api/auth';
 import { BACKEND_URL } from '../../api/constants';
 
 const Terms = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   // URL 쿼리스트링에서 token 파싱
   const token = searchParams.get('token');
@@ -362,6 +363,26 @@ const Terms = () => {
           <br />본 약관은 2026년 2월 6일부터 시행합니다.
         </p>
       </div>
+
+      {!token && (
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          style={{
+            marginTop: '24px',
+            padding: '12px 40px',
+            cursor: 'pointer',
+            backgroundColor: '#f1f3f5',
+            color: '#333',
+            border: 'none',
+            borderRadius: '8px',
+            fontSize: '16px',
+            fontWeight: 'bold',
+          }}
+        >
+          닫기
+        </button>
+      )}
 
       {token && (
         <div style={{ display: 'flex', gap: '15px' }}>

@@ -6,7 +6,6 @@ interface RoomCreationRequest {
   departureTime: string;
   minCapacity: number;
   maxCapacity: number;
-  estimatedFee: number;
 }
 
 interface RoomCreationResponse {
@@ -23,7 +22,6 @@ export interface Pot {
   minCapacity: number;
   maxCapacity: number;
   currentCount: number;
-  estimatedFee: number;
   status: 'RECRUITING' | 'SUCCESS' | 'FAILED' | 'EXPIRED';
   unreadCount: number;
   totalUnreadCount: number; // [추가] 봇 메시지 포함 전체 안 읽은 수
@@ -127,6 +125,18 @@ export const getKakaoDeepLink = async (roomId: number): Promise<string> => {
     `/rooms/${roomId}/kakao-deep-link`
   );
   return response.data;
+};
+
+// Track Kakao Deep Link result
+export const trackKakaoDeepLink = async (
+  roomId: number,
+  success: boolean,
+  error?: string
+): Promise<void> => {
+  await apiClient.post(`/rooms/${roomId}/kakao-deep-link/track`, {
+    success,
+    error: error ?? null,
+  });
 };
 
 // New API call: Kick user from room

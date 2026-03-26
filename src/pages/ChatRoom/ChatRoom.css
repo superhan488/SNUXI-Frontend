@@ -354,6 +354,7 @@
   border: none;
   cursor: default;
   white-space: nowrap;
+  max-width: calc(100vw - 48px);
 }
 .bot-message .message-content-wrapper {
   align-items: center;

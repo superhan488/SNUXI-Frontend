@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { BACKEND_URL } from '../../api/constants';
 import { isLoggedInAtom, userRoleAtom } from '../../common/user';
+import { openInExternalBrowser } from '../../utils/inAppBrowser';
 import './navBar.css';
 
 const NavBar = () => {
@@ -24,7 +25,18 @@ const NavBar = () => {
   const handleGoogleLogin = () => {
     const frontendRedirectUri = window.location.origin;
     const encodedUri = encodeURIComponent(frontendRedirectUri);
-    window.location.href = `${BACKEND_URL}/login?redirect_uri=${encodedUri}`;
+    const loginUrl = `${BACKEND_URL}/login?redirect_uri=${encodedUri}`;
+
+    const result = openInExternalBrowser(loginUrl);
+    if (result === 'redirected') return;
+    if (result === 'ios-fallback') {
+      // iOS 인앱: 하단 "..." 메뉴에서 "Safari로 열기" 안내
+      alert(
+        '인앱 브라우저에서는 Google 로그인이 지원되지 않습니다.\n\n하단 메뉴(⋯)에서 "Safari로 열기"를 선택해주세요.'
+      );
+      return;
+    }
+    window.location.href = loginUrl;
   };
 
   const handleLogout = () => {

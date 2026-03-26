@@ -16,6 +16,7 @@ import {
   getMessages,
   markAsRead,
   reportMessage,
+  trackKakaoDeepLink,
 } from '../../api/room';
 import { createStompClient } from '../../api/websocket';
 import { isLoggedInAtom, userIdAtom } from '../../common/user';
@@ -221,10 +222,18 @@ const ChatRoom = () => {
 
   const handleGetTaxiLink = async () => {
     if (!roomId) return;
+    const id = parseInt(roomId, 10);
     try {
-      const link = await getKakaoDeepLink(parseInt(roomId, 10));
+      const link = await getKakaoDeepLink(id);
       setTaxiLink(link);
       setShowTaxiLinkModal(true);
+      // 링크 실행 시도 후 track
+      try {
+        window.location.href = link;
+        await trackKakaoDeepLink(id, true);
+      } catch {
+        await trackKakaoDeepLink(id, false, '링크 실행 실패');
+      }
     } catch (error) {
       console.error('Error getting Kakao Deep Link:', error);
       const axiosErr = error as import('axios').AxiosError<{
@@ -235,6 +244,7 @@ const ChatRoom = () => {
         axiosErr.response?.data?.errMsg ||
         axiosErr.response?.data?.message ||
         '카카오택시 링크를 가져오는데 실패했습니다.';
+      await trackKakaoDeepLink(id, false, msg).catch((_e) => _e);
       alert(msg);
     }
   };

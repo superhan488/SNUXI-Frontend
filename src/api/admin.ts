@@ -1,7 +1,7 @@
 import apiClient from './index';
 
 // ================= /admin/reports =================
-export interface Report {
+interface Report {
   id: number;
   isProcessed: boolean;
   reportedAt: string;
@@ -11,40 +11,6 @@ export interface Report {
   reportedEmail: string;
   reason: 'ABUSE' | 'SPAM' | 'OTHER';
 }
-
-interface Pageable {
-  page: number;
-  size: number;
-  sort?: string[];
-}
-
-export interface PageInfo {
-  size: number;
-  number: number;
-  totalElements: number;
-  totalPages: number;
-}
-
-interface GetReportsResponse {
-  content: Report[];
-  page: PageInfo;
-}
-
-interface GetReportsParams {
-  isProcessed?: boolean;
-  reporterId?: number;
-  reportedId?: number;
-  pageable: Pageable;
-}
-
-export const getReports = async (
-  params: GetReportsParams
-): Promise<GetReportsResponse> => {
-  const response = await apiClient.get<GetReportsResponse>('/admin/reports', {
-    params,
-  });
-  return response.data;
-};
 
 // ================= /admin/reports/{reportId} =================
 export interface ReportChatLog {
@@ -87,5 +53,74 @@ export const suspendUser = async (
     `/admin/users/${userId}/suspend`,
     { days }
   );
+  return response.data;
+};
+
+// ================= /admin/users =================
+export interface AdminUser {
+  id: number;
+  email: string;
+  username: string;
+  role: string;
+  createdAt?: string;
+  suspended?: boolean;
+}
+
+interface AdminUsersResponse {
+  content: AdminUser[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+}
+
+export const getAdminUsers = async (
+  page = 0,
+  size = 20
+): Promise<AdminUsersResponse> => {
+  const response = await apiClient.get<AdminUsersResponse>('/admin/users', {
+    params: { page, size },
+  });
+  return response.data;
+};
+
+// ================= /admin/users/{userId}/unsuspend =================
+export const unsuspendUser = async (
+  userId: number
+): Promise<{ userId: number; status: string }> => {
+  const response = await apiClient.post<{ userId: number; status: string }>(
+    `/admin/users/${userId}/unsuspend`
+  );
+  return response.data;
+};
+
+// ================= /admin/pots =================
+export interface AdminPot {
+  potId: number;
+  departureName: string;
+  destinationName: string;
+  departureTime: string;
+  participantCount: number;
+  kakaoDeepLinkStatus: string;
+  kakaoDeepLinkAt: string | null;
+  kakaoDeepLinkError: string | null;
+  createdAt: string;
+}
+
+interface AdminPotsResponse {
+  content: AdminPot[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+}
+
+export const getAdminPots = async (
+  page = 0,
+  size = 20
+): Promise<AdminPotsResponse> => {
+  const response = await apiClient.get<AdminPotsResponse>('/admin/pots', {
+    params: { page, size },
+  });
   return response.data;
 };

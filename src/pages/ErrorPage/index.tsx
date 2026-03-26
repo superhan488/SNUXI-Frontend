@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BACKEND_URL } from '../../api/constants';
+import { openInExternalBrowser } from '../../utils/inAppBrowser';
 import './ErrorPage.css';
 
 const ErrorPage = () => {
@@ -31,7 +32,17 @@ const ErrorPage = () => {
     const loginUrl = encodeURIComponent(
       `${BACKEND_URL}/login?redirect_uri=${uri}`
     );
-    window.location.href = `${BACKEND_URL}/logout?redirect_uri=${loginUrl}`;
+    const logoutThenLoginUrl = `${BACKEND_URL}/logout?redirect_uri=${loginUrl}`;
+
+    const result = openInExternalBrowser(logoutThenLoginUrl);
+    if (result === 'redirected') return;
+    if (result === 'ios-fallback') {
+      alert(
+        '인앱 브라우저에서는 Google 로그인이 지원되지 않습니다.\n\n하단 메뉴(⋯)에서 "Safari로 열기"를 선택해주세요.'
+      );
+      return;
+    }
+    window.location.href = logoutThenLoginUrl;
   };
 
   return (

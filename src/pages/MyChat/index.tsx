@@ -11,6 +11,7 @@ import {
   getUserPots,
   kickUserFromRoom,
   leaveRoom,
+  trackKakaoDeepLink,
   updateRoomStatus,
 } from '../../api/room';
 import { userIdAtom } from '../../common/user';
@@ -152,12 +153,21 @@ const MyChat = () => {
       const link = await getKakaoDeepLink(pot.id);
       setTaxiLink(link);
       setShowTaxiLinkModal(true);
+      try {
+        window.location.href = link;
+        await trackKakaoDeepLink(pot.id, true);
+      } catch {
+        await trackKakaoDeepLink(pot.id, false, '링크 실행 실패').catch(
+          (_e) => _e
+        );
+      }
     } catch (error) {
       const axiosErr = error as import('axios').AxiosError<{ errMsg?: string }>;
-      alert(
+      const msg =
         axiosErr.response?.data?.errMsg ||
-          '카카오택시 링크를 가져오는데 실패했습니다.'
-      );
+        '카카오택시 링크를 가져오는데 실패했습니다.';
+      await trackKakaoDeepLink(pot.id, false, msg).catch((_e) => _e);
+      alert(msg);
     }
   };
 
