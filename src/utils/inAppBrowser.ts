@@ -33,7 +33,7 @@ export function detectInAppBrowser(): InAppDetection {
 
   // 기타 인앱 브라우저 감지
   const isOtherInApp =
-    /FBAN|FBAV|FB_IAB|FB4A|FBIOS|FBSS|Instagram|NAVER\(inapp|everytimeapp|band\/|twitter|trill|DaumApps|DaumDevice\/mobile|BytedanceWebview|TikTok|snapchat|whale/i.test(
+    /FBAN|FBAV|FB_IAB|FB4A|FBIOS|FBSS|Instagram|NAVER\(inapp|everytimeapp|band\/|twitter|trill|DaumApps|DaumDevice\/mobile|BytedanceWebview|TikTok|snapchat/i.test(
       ua
     );
 
