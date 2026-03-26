@@ -1,7 +1,7 @@
 import apiClient from './index';
 
 // ================= /admin/reports =================
-export interface Report {
+interface Report {
   id: number;
   isProcessed: boolean;
   reportedAt: string;
@@ -11,40 +11,6 @@ export interface Report {
   reportedEmail: string;
   reason: 'ABUSE' | 'SPAM' | 'OTHER';
 }
-
-interface Pageable {
-  page: number;
-  size: number;
-  sort?: string[];
-}
-
-export interface PageInfo {
-  size: number;
-  number: number;
-  totalElements: number;
-  totalPages: number;
-}
-
-interface GetReportsResponse {
-  content: Report[];
-  page: PageInfo;
-}
-
-interface GetReportsParams {
-  isProcessed?: boolean;
-  reporterId?: number;
-  reportedId?: number;
-  pageable: Pageable;
-}
-
-export const getReports = async (
-  params: GetReportsParams
-): Promise<GetReportsResponse> => {
-  const response = await apiClient.get<GetReportsResponse>('/admin/reports', {
-    params,
-  });
-  return response.data;
-};
 
 // ================= /admin/reports/{reportId} =================
 export interface ReportChatLog {

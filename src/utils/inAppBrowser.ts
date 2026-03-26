@@ -17,7 +17,7 @@ interface InAppDetection {
 /**
  * User-Agent 기반으로 인앱 브라우저 감지
  */
-export function detectInAppBrowser(): InAppDetection {
+function detectInAppBrowser(): InAppDetection {
   const ua = navigator.userAgent;
   const isIOS = /iPhone|iPad|iPod/i.test(ua);
 
