@@ -31,7 +31,6 @@ interface PotDto {
   minCapacity: number;
   maxCapacity: number;
   currentCount: number;
-  estimatedFee: number;
   status: string;
 }
 
@@ -125,7 +124,6 @@ const RoomSearch = () => {
           maxCapacity: item.maxCapacity,
           currentCapacity: item.currentCount,
           hostName: item.ownerName,
-          estimatedFee: item.estimatedFee,
           status: item.status,
         }));
 

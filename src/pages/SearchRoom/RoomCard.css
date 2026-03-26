@@ -44,8 +44,9 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  flex-shrink: 0;
-  max-width: 38%;
+  flex: 1;
+  min-width: 0;
+  max-width: 44%;
 }
 
 .rc-dot {
@@ -61,20 +62,21 @@
 }
 
 .rc-name {
-  font-size: 0.97rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   letter-spacing: -0.01em;
+  min-width: 0;
 }
 
 .rc-line {
-  flex: 0 0 24px;
+  flex: 0 0 20px;
   display: flex;
   align-items: center;
-  padding: 0 4px;
+  padding: 0 3px;
   min-width: 0;
 }
 
@@ -87,8 +89,9 @@
 /* 태그 */
 .rc-chips {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 6px;
+  align-items: center;
 }
 
 .rc-chip {

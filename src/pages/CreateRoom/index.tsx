@@ -106,7 +106,6 @@ const CreateRoom = () => {
       departureTime: departureTimeISO,
       minCapacity,
       maxCapacity: 4,
-      estimatedFee: 5000,
     };
 
     try {

@@ -6,7 +6,6 @@ interface RoomCreationRequest {
   departureTime: string;
   minCapacity: number;
   maxCapacity: number;
-  estimatedFee: number;
 }
 
 interface RoomCreationResponse {
@@ -23,7 +22,6 @@ export interface Pot {
   minCapacity: number;
   maxCapacity: number;
   currentCount: number;
-  estimatedFee: number;
   status: 'RECRUITING' | 'SUCCESS' | 'FAILED' | 'EXPIRED';
   unreadCount: number;
   totalUnreadCount: number; // [추가] 봇 메시지 포함 전체 안 읽은 수
