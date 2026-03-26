@@ -32,7 +32,7 @@ const NavBar = () => {
     if (result === 'ios-fallback') {
       // iOS 인앱: 하단 "..." 메뉴에서 "Safari로 열기" 안내
       alert(
-        '인앱 브라우저에서는 Google 로그인이 지원되지 않습니다.\n\n하단 메뉴(⋯)에서 "Safari로 열기"를 선택해주세요.',
+        '인앱 브라우저에서는 Google 로그인이 지원되지 않습니다.\n\n하단 메뉴(⋯)에서 "Safari로 열기"를 선택해주세요.'
       );
       return;
     }

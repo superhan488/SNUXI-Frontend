@@ -6,12 +6,7 @@
  * OAuth 시작 전에 외부 브라우저로 리다이렉트해야 함.
  */
 
-type InAppType =
-  | 'kakaotalk'
-  | 'line'
-  | 'android-other'
-  | 'ios-other'
-  | 'none';
+type InAppType = 'kakaotalk' | 'line' | 'android-other' | 'ios-other' | 'none';
 
 interface InAppDetection {
   isInApp: boolean;
@@ -39,7 +34,7 @@ export function detectInAppBrowser(): InAppDetection {
   // 기타 인앱 브라우저 감지
   const isOtherInApp =
     /FBAN|FBAV|FB_IAB|FB4A|FBIOS|FBSS|Instagram|NAVER\(inapp|everytimeapp|band\/|twitter|trill|DaumApps|DaumDevice\/mobile|BytedanceWebview|TikTok|snapchat|whale/i.test(
-      ua,
+      ua
     );
 
   // Android WebView 일반 감지 ("; wv)" 패턴)
@@ -70,7 +65,7 @@ export function detectInAppBrowser(): InAppDetection {
  * - 'ios-fallback': iOS 인앱 (카카오톡 제외) → 수동 안내 필요
  */
 export function openInExternalBrowser(
-  url: string,
+  url: string
 ): 'not-inapp' | 'redirected' | 'ios-fallback' {
   const { isInApp, type } = detectInAppBrowser();
 
